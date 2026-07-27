@@ -1,8 +1,9 @@
-# The rulebook: what a reharmonization agent is allowed to play
+# Suggested substitutions: the rulebook behind a reharmonization agent
 
 A companion page for a reinforcement-learning agent that reharmonizes jazz standards
-by editing chords. The agent may only make edits that jazz theory sanctions; this page
-is that vocabulary.
+by editing chords. These are the substitutions jazz theory suggests, and what the agent
+is offered at every step. It is not confined to them &mdash; the agent can be let off
+the book, and a small share of its training exploration deliberately is.
 
 **→ [Open the page](https://alonyamin1.github.io/jazz-reharmonization-rules/)**
 
