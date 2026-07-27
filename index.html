@@ -1,0 +1,1210 @@
+<!doctype html><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rulebook demo — verify each rule</title>
+<style>
+body{font-family:Georgia,serif;max-width:1200px;margin:2em auto;padding:0 1em;background:#faf8f4;color:#222}
+h1{font-size:1.6em} .note{background:#fff3cd;border:1px solid #e0c060;padding:.7em 1em;border-radius:6px}
+.lede,.prov{max-width:820px} .prov{color:#555;font-size:.92em}
+.fam-head{margin-top:2em;border-bottom:2px solid #ccc;padding-bottom:.2em}
+.fam-head .count{color:#888;font-weight:normal;font-size:.75em}
+.card{background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.2em;margin:1.6em 0}
+.card h3{margin:.1em 0 .3em;font-size:1.15em} .fam{color:#777;font-size:.85em}
+.badge{font-size:11px;font-weight:600;letter-spacing:.04em;padding:2px 7px;border:1px solid #999;border-radius:9px;color:#555;margin-left:6px}
+.desc{margin:.5em 0} .refs{font-size:.9em;color:#444;margin:.4em 0} .refs a{color:#1a56a0}
+.edit{font-weight:bold;margin:.4em 0;color:#7a2e2e}
+.row{display:flex;gap:1em;flex-wrap:wrap} .side{flex:1;min-width:420px}
+.lbl{font-weight:bold;font-size:.85em;letter-spacing:.08em;color:#555}
+img{width:100%;border:1px solid #ccc;background:#fff} audio{width:100%}
+.fail{color:#a00;font-weight:bold}
+.ab{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.ab .play{padding:6px 14px;border:1px solid #999;border-radius:4px;background:#fff;cursor:pointer}
+.ab input[type=range]{width:220px;vertical-align:middle}
+.ab .sidebtn{padding:5px 12px;border:1px solid #999;background:#fff;cursor:pointer}
+.ab .sidebtn:first-child{border-radius:4px 0 0 4px}
+.ab .sidebtn:last-child{border-radius:0 4px 4px 0;border-left:none}
+.ab .sidebtn.on{background:#C99700;color:#fff;border-color:#C99700}
+/* running playhead: a line over the staff, positioned from MuseScore's own
+   measure boxes (see _parse_mpos) so it tracks the engraving, not a guess */
+.sheet{position:relative;display:inline-block;max-width:100%}
+.sheet img{display:block;max-width:100%;height:auto}
+.ph{position:absolute;top:0;width:2px;background:#C0392B;opacity:0;
+    pointer-events:none;transition:opacity .12s;box-shadow:0 0 3px rgba(192,57,43,.5)}
+.ph.on{opacity:.85}
+.menu{background:#fff;border:1px solid #ddd;border-radius:8px;padding:.9em 1.1em;margin:1.4em 0}
+.menu>b{display:block;margin-bottom:.5em;font-size:.95em}
+/* label column + wrapping chip column, so continuation lines line up under the
+   first chip instead of under the group label */
+.mgroup{display:flex;align-items:baseline;gap:14px;margin:.5em 0}
+.mfam{flex:0 0 84px;color:#666;font-size:.78em;letter-spacing:.05em;text-align:right}
+.mfam a{color:#666;text-decoration:none}
+.mlinks{flex:1;display:flex;flex-wrap:wrap;gap:6px}
+.menu a{color:#1a56a0;text-decoration:none;font-size:.88em;
+        border:1px solid #dde3ea;border-radius:12px;padding:2px 9px;
+        white-space:nowrap;display:inline-block}
+.menu a:hover{background:#eef3f9;border-color:#1a56a0}
+@media (max-width:640px){.mgroup{flex-direction:column;gap:4px}
+                         .mfam{text-align:left;flex:none}}
+.sub-head{margin:1.6em 0 .2em;font-size:1em;font-weight:600;color:#666;
+          text-transform:none;letter-spacing:0;border-bottom:1px solid #e6e6e6;
+          padding-bottom:.25em}
+.totop{float:right;color:#aaa;text-decoration:none;font-size:.9em}
+.totop:hover{color:#1a56a0}
+</style>
+<h1>The rulebook: what the agent is allowed to play</h1>
+<p class="lede">Every substitution the agent may make, with a real example from the
+corpus &mdash; the notation before and after, and the audio.</p>
+<p class="prov">The rules were drawn from the standard jazz-harmony literature and from
+the reharmonization lessons on thejazzpianosite.com, in collaboration with
+<b>Anton Petrov</b> and <b>Shai Cohen</b>. The lead sheets come from the Wikifonia
+archive and the JazzMus corpus. Each example was found by scanning that corpus for a
+place the rule actually fires, and chosen by our learned critic so the move is heard
+at its best.</p>
+<nav id="menu" class="menu"><b>Jump to a rule</b>
+<div class="mgroup"><span class="mfam"><a href="#mv-insert">INSERT</a></span><span class="mlinks"><a href="#chromatic_approach">Chromatic approach</a><a href="#diatonic_approach">Diatonic approach</a><a href="#dominant_approach_placeholder">Dominant approach (insert)</a><a href="#harmonic_fill">Harmonic fill (insert)</a><a href="#subdominant_insert">Subdominant insert</a></span></div>
+<div class="mgroup"><span class="mfam"><a href="#mv-replace">REPLACE</a></span><span class="mlinks"><a href="#functional_substitution">Functional substitution</a><a href="#backdoor_dominant">Backdoor dominant</a><a href="#blues_subdominant_quality_swap">Blues IV7 — quality swap</a><a href="#blues_subdominant_substitution">Blues IV7 — substitution</a><a href="#deceptive_cadence">Deceptive cadence</a><a href="#related_ii_of_subV">Related ii of the tritone sub</a><a href="#dominant_approach_replace_minor">Related-ii backfill (replace)</a><a href="#dominant_approach_replace">Secondary-dominant chaining (replace)</a><a href="#tritone_substitution_placeholder">Tritone substitution</a><a href="#ii_v_related_placeholder">ii-V preparation (replace)</a><a href="#minor_for_dominant">ii-for-V swap</a><a href="#common_tone_diminished">Common-tone diminished</a><a href="#diminished_for_dominant">Diminished for dominant</a><a href="#diminished_passing">Diminished passing chord</a><a href="#diminished_resolution">Diminished resolution</a><a href="#chromatic_mediant_major">Chromatic mediants</a><a href="#neapolitan_to_minor">Minor palette: Neapolitan bII</a><a href="#bIII_pre_dominant_minor">Minor palette: bIII before V</a><a href="#minor_key_vi_to_i">Minor palette: bVI</a><a href="#half_dim_predominant_to_minor">Minor palette: ii-half-dim predominant</a><a href="#mixture_IV_to_minor">Minor palette: major IV</a><a href="#modal_subtonic_to_minor">Minor palette: subtonic bVII</a><a href="#modal_interchange">Modal interchange (major keys)</a><a href="#plagal_cadence">Plagal cadence</a></span></div>
+<div class="mgroup"><span class="mfam"><a href="#mv-delete">DELETE</a></span><span class="mlinks"><a href="#delete">Delete (structural move)</a></span></div>
+<div class="mgroup"><span class="mfam"><a href="#mv-split">SPLIT</a></span><span class="mlinks"><a href="#split">ii-V split</a></span></div></nav><h2 class="fam-head" id="mv-insert">INSERT <span class="count">(5) &mdash; adds a chord</span></h2>
+
+<div class="card" id="chromatic_approach">
+<h3>Chromatic approach <span class="badge">also replaces</span></h3>
+<div class="fam">tune: <b title="jazzmus_0048__Naima">Naima</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A chord a half-step above or below the target, in the same quality family (planing). Rejected if both strong-beat and full-bar.</div>
+<div class="edit">Applied edit &mdash; bar 3, beat 1: replace A:maj7 with F#:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/chromatic_approach_orig.png" alt="Chromatic approach — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/chromatic_approach_after.png" alt="Chromatic approach — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="chromatic_approach" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":648.5,"h":99.2},{"tick":2000,"x":798.1,"y":493.6,"w":327.5,"h":99.2},{"tick":4000,"x":1125.6,"y":493.6,"w":439.9,"h":99.2},{"tick":6000,"x":1565.5,"y":493.6,"w":327.5,"h":99.2},{"tick":8000,"x":1893.0,"y":493.6,"w":327.5,"h":99.2},{"tick":10000,"x":2220.5,"y":493.6,"w":439.9,"h":99.2},{"tick":12000,"x":25.6,"y":1175.7,"w":1300.6,"h":99.2},{"tick":14000,"x":1326.2,"y":1175.7,"w":1334.2,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1341},"after":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":646.6,"h":99.2},{"tick":2000,"x":796.2,"y":493.6,"w":325.3,"h":99.2},{"tick":4000,"x":1121.5,"y":493.6,"w":449.7,"h":99.2},{"tick":6000,"x":1571.1,"y":493.6,"w":325.3,"h":99.2},{"tick":8000,"x":1896.4,"y":493.6,"w":325.3,"h":99.2},{"tick":10000,"x":2221.7,"y":493.6,"w":438.6,"h":99.2},{"tick":12000,"x":25.6,"y":1175.7,"w":1300.6,"h":99.2},{"tick":14000,"x":1326.2,"y":1175.7,"w":1334.2,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1341}}'>
+  <audio data-role="before" preload="metadata" src="audio/chromatic_approach_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/chromatic_approach_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/chromatic_approach_orig.mp3"></audio>
+    <audio controls src="audio/chromatic_approach_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="diatonic_approach">
+<h3>Diatonic approach <span class="badge">also replaces</span></h3>
+<div class="fam">tune: <b title="jazzmus_0063__Hallelujah,_I_love_her_so">Hallelujah, I love her so</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A chord a whole step above or below the target, same family — stepwise bass motion. Metric gate: beat 3, half-bar span flush to the target.</div>
+<div class="edit">Applied edit &mdash; bar 5, beat 3: replace B:7 with D:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/diatonic_approach_orig.png" alt="Diatonic approach — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/diatonic_approach_after.png" alt="Diatonic approach — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="diatonic_approach" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":821.7,"h":99.2},{"tick":2000,"x":971.3,"y":490.6,"w":503.1,"h":99.2},{"tick":4000,"x":1474.4,"y":490.6,"w":611.0,"h":99.2},{"tick":6000,"x":2085.4,"y":490.6,"w":575.0,"h":99.2},{"tick":8000,"x":25.6,"y":1172.7,"w":773.9,"h":99.2},{"tick":10000,"x":799.5,"y":1172.7,"w":618.1,"h":99.2},{"tick":12000,"x":1417.6,"y":1172.7,"w":729.5,"h":99.2},{"tick":14000,"x":2147.1,"y":1172.7,"w":513.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":821.7,"h":99.2},{"tick":2000,"x":971.3,"y":490.6,"w":503.1,"h":99.2},{"tick":4000,"x":1474.4,"y":490.6,"w":611.0,"h":99.2},{"tick":6000,"x":2085.4,"y":490.6,"w":575.0,"h":99.2},{"tick":8000,"x":25.6,"y":1172.7,"w":773.9,"h":99.2},{"tick":10000,"x":799.5,"y":1172.7,"w":618.1,"h":99.2},{"tick":12000,"x":1417.6,"y":1172.7,"w":729.5,"h":99.2},{"tick":14000,"x":2147.1,"y":1172.7,"w":513.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/diatonic_approach_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/diatonic_approach_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/diatonic_approach_orig.mp3"></audio>
+    <audio controls src="audio/diatonic_approach_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="dominant_approach_placeholder">
+<h3>Dominant approach (insert)</h3>
+<div class="fam">tune: <b title="jazzmus_0037__Central_Park_West">Central Park West</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Insert the V7 of the next chord: dominant quality a fifth above a stable target with cadential weight (primary V-I or secondary V/x onto a diatonic degree). Metric gate: onset on beat 3, spanning flush to the target downbeat; beat-4 quarter-note approaches are forbidden.</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 3: insert Ab:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/dominant_approach_placeholder_orig.png" alt="Dominant approach (insert) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/dominant_approach_placeholder_after.png" alt="Dominant approach (insert) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="dominant_approach_placeholder" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":532.6,"w":726.4,"h":99.2},{"tick":2000,"x":876.0,"y":532.6,"w":419.6,"h":99.2},{"tick":4000,"x":1295.6,"y":532.6,"w":474.8,"h":99.2},{"tick":6000,"x":1770.4,"y":532.6,"w":482.9,"h":99.2},{"tick":8000,"x":2253.4,"y":532.6,"w":407.0,"h":99.2},{"tick":10000,"x":25.6,"y":1214.7,"w":1145.6,"h":99.2},{"tick":12000,"x":1171.2,"y":1214.7,"w":764.4,"h":99.2},{"tick":14000,"x":1935.6,"y":1214.7,"w":724.8,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1380},"after":{"bars":[{"tick":0,"x":149.6,"y":532.6,"w":726.4,"h":99.2},{"tick":2000,"x":876.0,"y":532.6,"w":419.6,"h":99.2},{"tick":4000,"x":1295.6,"y":532.6,"w":474.8,"h":99.2},{"tick":6000,"x":1770.4,"y":532.6,"w":482.9,"h":99.2},{"tick":8000,"x":2253.4,"y":532.6,"w":407.0,"h":99.2},{"tick":10000,"x":25.6,"y":1214.7,"w":1103.5,"h":99.2},{"tick":12000,"x":1129.1,"y":1214.7,"w":840.8,"h":99.2},{"tick":14000,"x":1969.9,"y":1214.7,"w":690.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1380}}'>
+  <audio data-role="before" preload="metadata" src="audio/dominant_approach_placeholder_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/dominant_approach_placeholder_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/dominant_approach_placeholder_orig.mp3"></audio>
+    <audio controls src="audio/dominant_approach_placeholder_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="harmonic_fill">
+<h3>Harmonic fill (insert)</h3>
+<div class="fam">tune: <b title="jazzmus_0040__Gentle_Rain">Gentle Rain</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A chord held for two bars or more gets a new onset on a strong beat; the fill must be a same-function substitute or parallel-minor borrowing of the held chord.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 3: insert C:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/harmonic_fill_orig.png" alt="Harmonic fill (insert) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/harmonic_fill_after.png" alt="Harmonic fill (insert) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="harmonic_fill" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":566.8,"h":99.2},{"tick":2000,"x":716.4,"y":490.6,"w":341.8,"h":99.2},{"tick":4000,"x":1058.2,"y":490.6,"w":341.8,"h":99.2},{"tick":6000,"x":1400.0,"y":490.6,"w":341.8,"h":99.2},{"tick":8000,"x":1741.8,"y":490.6,"w":245.4,"h":99.2},{"tick":10000,"x":1987.2,"y":490.6,"w":427.8,"h":99.2},{"tick":12000,"x":2415.0,"y":490.6,"w":245.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/harmonic_fill_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/harmonic_fill_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/harmonic_fill_orig.mp3"></audio>
+    <audio controls src="audio/harmonic_fill_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="subdominant_insert">
+<h3>Subdominant insert</h3>
+<div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">The subdominant (maj7 a fourth above) of the held chord is inserted into its span on a weak beat (Steedman's Rule 2: x -> x Sd_x).</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 2: insert Ab:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/subdominant_insert_orig.png" alt="Subdominant insert — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/subdominant_insert_after.png" alt="Subdominant insert — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="subdominant_insert" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":961.6,"h":99.2},{"tick":2000,"x":1111.2,"y":493.6,"w":316.3,"h":99.2},{"tick":4000,"x":1427.4,"y":493.6,"w":592.8,"h":99.2},{"tick":6000,"x":2020.2,"y":493.6,"w":640.1,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":987.2,"h":99.2},{"tick":10000,"x":1012.8,"y":1175.7,"w":384.6,"h":99.2},{"tick":12000,"x":1397.4,"y":1175.7,"w":769.0,"h":99.2},{"tick":14000,"x":2166.4,"y":1175.7,"w":494.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1341},"after":{"bars":[{"tick":0,"x":149.6,"y":506.8,"w":965.5,"h":99.2},{"tick":2000,"x":1115.1,"y":506.8,"w":315.5,"h":99.2},{"tick":4000,"x":1430.6,"y":506.8,"w":591.3,"h":99.2},{"tick":6000,"x":2021.9,"y":506.8,"w":638.5,"h":99.2},{"tick":8000,"x":25.6,"y":1188.9,"w":987.2,"h":99.2},{"tick":10000,"x":1012.8,"y":1188.9,"w":384.6,"h":99.2},{"tick":12000,"x":1397.4,"y":1188.9,"w":769.0,"h":99.2},{"tick":14000,"x":2166.4,"y":1188.9,"w":494.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1354}}'>
+  <audio data-role="before" preload="metadata" src="audio/subdominant_insert_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/subdominant_insert_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/subdominant_insert_orig.mp3"></audio>
+    <audio controls src="audio/subdominant_insert_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h2 class="fam-head" id="mv-replace">REPLACE <span class="count">(24) &mdash; swaps a chord for another</span></h2>
+<h3 class="sub-head">Same-function recoloring</h3>
+
+<div class="card" id="functional_substitution">
+<h3>Functional substitution</h3>
+<div class="fam">tune: <b title="jazzmus_0025__How_Deep_Is_The_Ocean">How Deep Is The Ocean</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Swap a chord for another with the same harmonic function (Tonic / Subdominant / Dominant) in the key. Major keys demand each degree's diatonic seventh quality; minor keys admit qualities from the natural, harmonic, and melodic minors. The blues tonic dominant (I7) is never treated as a swappable tonic.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace C:min7 with Eb:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/functional_substitution_orig.png" alt="Functional substitution — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/functional_substitution_after.png" alt="Functional substitution — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="functional_substitution" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":717.1,"h":99.2},{"tick":2000,"x":866.7,"y":490.6,"w":314.4,"h":99.2},{"tick":4000,"x":1181.2,"y":490.6,"w":455.3,"h":99.2},{"tick":6000,"x":1636.5,"y":490.6,"w":254.2,"h":99.2},{"tick":8000,"x":1890.6,"y":490.6,"w":455.3,"h":99.2},{"tick":10000,"x":2345.9,"y":490.6,"w":314.4,"h":99.2},{"tick":12000,"x":25.6,"y":1172.7,"w":1796.3,"h":99.2},{"tick":14000,"x":1821.9,"y":1172.7,"w":838.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":717.1,"h":99.2},{"tick":2000,"x":866.7,"y":498.6,"w":314.4,"h":99.2},{"tick":4000,"x":1181.2,"y":498.6,"w":455.3,"h":99.2},{"tick":6000,"x":1636.5,"y":498.6,"w":254.2,"h":99.2},{"tick":8000,"x":1890.6,"y":498.6,"w":455.3,"h":99.2},{"tick":10000,"x":2345.9,"y":498.6,"w":314.4,"h":99.2},{"tick":12000,"x":25.6,"y":1180.7,"w":1796.3,"h":99.2},{"tick":14000,"x":1821.9,"y":1180.7,"w":838.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/functional_substitution_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/functional_substitution_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/functional_substitution_orig.mp3"></audio>
+    <audio controls src="audio/functional_substitution_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h3 class="sub-head">Dominant machinery</h3>
+
+<div class="card" id="backdoor_dominant">
+<h3>Backdoor dominant</h3>
+<div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Place a dominant a whole step below a major-family tonic target (bVII7 -> I; full form Fm7-Bb7-Cmaj7). Target must carry cadential weight; the major-target restriction is corpus-validated.</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 3: replace D:7 with B:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/backdoor_dominant_orig.png" alt="Backdoor dominant — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/backdoor_dominant_after.png" alt="Backdoor dominant — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="backdoor_dominant" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407},"after":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407}}'>
+  <audio data-role="before" preload="metadata" src="audio/backdoor_dominant_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/backdoor_dominant_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/backdoor_dominant_orig.mp3"></audio>
+    <audio controls src="audio/backdoor_dominant_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="blues_subdominant_quality_swap">
+<h3>Blues IV7 — quality swap</h3>
+<div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">An existing IV chord before a major/minor target takes dominant-7 quality (Fmaj7 -> F7 in C) — the literal blues IV. Weak beats only; never applied to a chord that is already dominant.</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 2: replace F:maj7 with F:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/blues_subdominant_quality_swap_orig.png" alt="Blues IV7 — quality swap — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/blues_subdominant_quality_swap_after.png" alt="Blues IV7 — quality swap — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="blues_subdominant_quality_swap" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":920.0,"h":99.2},{"tick":12000,"x":945.6,"y":1197.9,"w":833.1,"h":99.2},{"tick":14000,"x":1778.7,"y":1197.9,"w":881.7,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363},"after":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":920.0,"h":99.2},{"tick":12000,"x":945.6,"y":1197.9,"w":833.1,"h":99.2},{"tick":14000,"x":1778.7,"y":1197.9,"w":881.7,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363}}'>
+  <audio data-role="before" preload="metadata" src="audio/blues_subdominant_quality_swap_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/blues_subdominant_quality_swap_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/blues_subdominant_quality_swap_orig.mp3"></audio>
+    <audio controls src="audio/blues_subdominant_quality_swap_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="blues_subdominant_substitution">
+<h3>Blues IV7 — substitution</h3>
+<div class="fam">tune: <b title="jazzmus_0023__Easter_Parade">Easter Parade</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Any non-IV, non-dominant chord before a major/minor target is replaced by the target's IV7 (Dm7 -> F7 before Cmaj7). Weak beats only.</div>
+<div class="edit">Applied edit &mdash; bar 4, beat 4: replace Db:dim7 with Eb:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/blues_subdominant_substitution_orig.png" alt="Blues IV7 — substitution — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/blues_subdominant_substitution_after.png" alt="Blues IV7 — substitution — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="blues_subdominant_substitution" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":663.5,"h":99.2},{"tick":2000,"x":813.1,"y":498.6,"w":393.0,"h":99.2},{"tick":4000,"x":1206.1,"y":498.6,"w":443.0,"h":99.2},{"tick":6000,"x":1649.1,"y":498.6,"w":541.5,"h":99.2},{"tick":8000,"x":2190.7,"y":498.6,"w":469.7,"h":99.2},{"tick":10000,"x":25.6,"y":1180.7,"w":1177.6,"h":99.2},{"tick":12000,"x":1203.2,"y":1180.7,"w":877.8,"h":99.2},{"tick":14000,"x":2081.0,"y":1180.7,"w":579.4,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":683.7,"h":99.2},{"tick":2000,"x":833.3,"y":498.6,"w":410.0,"h":99.2},{"tick":4000,"x":1243.3,"y":498.6,"w":461.3,"h":99.2},{"tick":6000,"x":1704.6,"y":498.6,"w":463.7,"h":99.2},{"tick":8000,"x":2168.2,"y":498.6,"w":492.1,"h":99.2},{"tick":10000,"x":25.6,"y":1180.7,"w":1177.6,"h":99.2},{"tick":12000,"x":1203.2,"y":1180.7,"w":877.8,"h":99.2},{"tick":14000,"x":2081.0,"y":1180.7,"w":579.4,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/blues_subdominant_substitution_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/blues_subdominant_substitution_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/blues_subdominant_substitution_orig.mp3"></audio>
+    <audio controls src="audio/blues_subdominant_substitution_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="deceptive_cadence">
+<h3>Deceptive cadence</h3>
+<div class="fam">tune: <b title="jazzmus_0064__No_Moe">No Moe</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace the expected resolution after a V: vi in major (V7 -> Am7 in C), bVI in minor (V7 -> Abmaj7 in C minor).</div>
+<div class="edit">Applied edit &mdash; bar 3, beat 1: replace Bb:maj7 with G:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/deceptive_cadence_orig.png" alt="Deceptive cadence — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/deceptive_cadence_after.png" alt="Deceptive cadence — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="deceptive_cadence" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":508.9,"w":798.9,"h":99.2},{"tick":2000,"x":948.5,"y":508.9,"w":585.1,"h":99.2},{"tick":4000,"x":1533.6,"y":508.9,"w":610.3,"h":99.2},{"tick":6000,"x":2143.8,"y":508.9,"w":516.5,"h":99.2},{"tick":8000,"x":25.6,"y":1190.9,"w":771.3,"h":99.2},{"tick":10000,"x":796.9,"y":1190.9,"w":629.0,"h":99.2},{"tick":12000,"x":1426.0,"y":1190.9,"w":563.9,"h":99.2},{"tick":14000,"x":1989.8,"y":1190.9,"w":670.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1356},"after":{"bars":[{"tick":0,"x":149.6,"y":498.9,"w":798.9,"h":99.2},{"tick":2000,"x":948.5,"y":498.9,"w":585.1,"h":99.2},{"tick":4000,"x":1533.6,"y":498.9,"w":610.3,"h":99.2},{"tick":6000,"x":2143.8,"y":498.9,"w":516.5,"h":99.2},{"tick":8000,"x":25.6,"y":1180.9,"w":771.3,"h":99.2},{"tick":10000,"x":796.9,"y":1180.9,"w":629.0,"h":99.2},{"tick":12000,"x":1426.0,"y":1180.9,"w":563.9,"h":99.2},{"tick":14000,"x":1989.8,"y":1180.9,"w":670.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/deceptive_cadence_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/deceptive_cadence_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/deceptive_cadence_orig.mp3"></audio>
+    <audio controls src="audio/deceptive_cadence_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="related_ii_of_subV">
+<h3>Related ii of the tritone sub</h3>
+<div class="fam">tune: <b title="jazzmus_0064__No_Moe">No Moe</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace a dominant with the minor seventh a half-step above its root — the ii of its tritone substitute (G7 -> Abm7, since Abm7 is the ii of Db7). Context-free: whether it resolves well is the critic's judgment.</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 3: replace F:7 with F#:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/related_ii_of_subV_orig.png" alt="Related ii of the tritone sub — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/related_ii_of_subV_after.png" alt="Related ii of the tritone sub — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="related_ii_of_subV" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":508.9,"w":798.9,"h":99.2},{"tick":2000,"x":948.5,"y":508.9,"w":585.1,"h":99.2},{"tick":4000,"x":1533.6,"y":508.9,"w":610.3,"h":99.2},{"tick":6000,"x":2143.8,"y":508.9,"w":516.5,"h":99.2},{"tick":8000,"x":25.6,"y":1190.9,"w":771.3,"h":99.2},{"tick":10000,"x":796.9,"y":1190.9,"w":629.0,"h":99.2},{"tick":12000,"x":1426.0,"y":1190.9,"w":563.9,"h":99.2},{"tick":14000,"x":1989.8,"y":1190.9,"w":670.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1356},"after":{"bars":[{"tick":0,"x":149.6,"y":508.9,"w":798.9,"h":99.2},{"tick":2000,"x":948.5,"y":508.9,"w":585.1,"h":99.2},{"tick":4000,"x":1533.6,"y":508.9,"w":610.3,"h":99.2},{"tick":6000,"x":2143.8,"y":508.9,"w":516.5,"h":99.2},{"tick":8000,"x":25.6,"y":1190.9,"w":771.3,"h":99.2},{"tick":10000,"x":796.9,"y":1190.9,"w":629.0,"h":99.2},{"tick":12000,"x":1426.0,"y":1190.9,"w":563.9,"h":99.2},{"tick":14000,"x":1989.8,"y":1190.9,"w":670.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1356}}'>
+  <audio data-role="before" preload="metadata" src="audio/related_ii_of_subV_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/related_ii_of_subV_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/related_ii_of_subV_orig.mp3"></audio>
+    <audio controls src="audio/related_ii_of_subV_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="dominant_approach_replace_minor">
+<h3>Related-ii backfill (replace)</h3>
+<div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Same trigger as the chaining rule, but places the minor seventh at that root instead of the dominant — the alternating ii/V colour of extended cycles (Am7-D7-Gm7-C7). The policy chooses between the two.</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 4: replace F:maj7 with C:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/dominant_approach_replace_minor_orig.png" alt="Related-ii backfill (replace) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/dominant_approach_replace_minor_after.png" alt="Related-ii backfill (replace) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="dominant_approach_replace_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":881.9,"h":99.2},{"tick":12000,"x":907.5,"y":1197.9,"w":797.8,"h":99.2},{"tick":14000,"x":1705.3,"y":1197.9,"w":955.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363},"after":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":881.9,"h":99.2},{"tick":12000,"x":907.5,"y":1197.9,"w":797.8,"h":99.2},{"tick":14000,"x":1705.3,"y":1197.9,"w":955.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363}}'>
+  <audio data-role="before" preload="metadata" src="audio/dominant_approach_replace_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/dominant_approach_replace_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/dominant_approach_replace_minor_orig.mp3"></audio>
+    <audio controls src="audio/dominant_approach_replace_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="dominant_approach_replace">
+<h3>Secondary-dominant chaining (replace)</h3>
+<div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace a non-dominant chord with the dominant a fifth above the following dominant. Weak beats only; never replaces an existing dominant. Successive applications unroll a full turnaround (E7-A7-D7-G7-C).</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 4: replace F:maj7 with C:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/dominant_approach_replace_orig.png" alt="Secondary-dominant chaining (replace) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/dominant_approach_replace_after.png" alt="Secondary-dominant chaining (replace) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="dominant_approach_replace" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":881.9,"h":99.2},{"tick":12000,"x":907.5,"y":1197.9,"w":797.8,"h":99.2},{"tick":14000,"x":1705.3,"y":1197.9,"w":955.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363},"after":{"bars":[{"tick":0,"x":149.6,"y":515.8,"w":710.7,"h":99.2},{"tick":2000,"x":860.3,"y":515.8,"w":423.6,"h":99.2},{"tick":4000,"x":1283.9,"y":515.8,"w":476.5,"h":99.2},{"tick":6000,"x":1760.3,"y":515.8,"w":423.6,"h":99.2},{"tick":8000,"x":2183.9,"y":515.8,"w":476.5,"h":99.2},{"tick":10000,"x":25.6,"y":1197.9,"w":881.9,"h":99.2},{"tick":12000,"x":907.5,"y":1197.9,"w":797.8,"h":99.2},{"tick":14000,"x":1705.3,"y":1197.9,"w":955.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1363}}'>
+  <audio data-role="before" preload="metadata" src="audio/dominant_approach_replace_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/dominant_approach_replace_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/dominant_approach_replace_orig.mp3"></audio>
+    <audio controls src="audio/dominant_approach_replace_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="tritone_substitution_placeholder">
+<h3>Tritone substitution</h3>
+<div class="fam">tune: <b title="jazzmus_0079__In_Walked_Bud">In Walked Bud</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace a dominant with the dominant a tritone away — the two chords share their guide-tone tritone (3rd & 7th). Requires at least half a bar of cadential weight.</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 3: replace Bb:7 with E:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/tritone_substitution_placeholder_orig.png" alt="Tritone substitution — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/tritone_substitution_placeholder_after.png" alt="Tritone substitution — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="tritone_substitution_placeholder" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":690.3,"h":99.2},{"tick":2000,"x":839.9,"y":498.6,"w":567.5,"h":99.2},{"tick":4000,"x":1407.5,"y":498.6,"w":532.0,"h":99.2},{"tick":6000,"x":1939.5,"y":498.6,"w":366.2,"h":99.2},{"tick":8000,"x":2305.7,"y":498.6,"w":354.7,"h":99.2},{"tick":10000,"x":25.6,"y":1180.7,"w":1170.9,"h":99.2},{"tick":12000,"x":1196.5,"y":1180.7,"w":876.3,"h":99.2},{"tick":14000,"x":2072.9,"y":1180.7,"w":587.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":690.3,"h":99.2},{"tick":2000,"x":839.9,"y":498.6,"w":567.5,"h":99.2},{"tick":4000,"x":1407.5,"y":498.6,"w":532.0,"h":99.2},{"tick":6000,"x":1939.5,"y":498.6,"w":366.2,"h":99.2},{"tick":8000,"x":2305.7,"y":498.6,"w":354.7,"h":99.2},{"tick":10000,"x":25.6,"y":1180.7,"w":1170.9,"h":99.2},{"tick":12000,"x":1196.5,"y":1180.7,"w":876.3,"h":99.2},{"tick":14000,"x":2072.9,"y":1180.7,"w":587.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/tritone_substitution_placeholder_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/tritone_substitution_placeholder_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/tritone_substitution_placeholder_orig.mp3"></audio>
+    <audio controls src="audio/tritone_substitution_placeholder_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="ii_v_related_placeholder">
+<h3>ii-V preparation (replace)</h3>
+<div class="fam">tune: <b title="jazzmus_0019__Isfahan">Isfahan</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">The slot before a dominant receives its related ii (minor or half-diminished, a fourth below). The ii must span at least half a bar — shorter is passing, not preparatory.</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 1: replace G:dim7 with G:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/ii_v_related_placeholder_orig.png" alt="ii-V preparation (replace) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/ii_v_related_placeholder_after.png" alt="ii-V preparation (replace) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="ii_v_related_placeholder" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":710.5,"h":99.2},{"tick":2000,"x":860.1,"y":446.2,"w":451.3,"h":99.2},{"tick":4000,"x":1311.3,"y":446.2,"w":239.2,"h":99.2},{"tick":6000,"x":1550.6,"y":446.2,"w":437.5,"h":99.2},{"tick":8000,"x":1988.1,"y":446.2,"w":239.2,"h":99.2},{"tick":10000,"x":2227.3,"y":446.2,"w":433.1,"h":99.2},{"tick":12000,"x":25.6,"y":1128.3,"w":1448.4,"h":99.2},{"tick":14000,"x":1474.0,"y":1128.3,"w":1186.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293},"after":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":710.5,"h":99.2},{"tick":2000,"x":860.1,"y":446.2,"w":451.3,"h":99.2},{"tick":4000,"x":1311.3,"y":446.2,"w":239.2,"h":99.2},{"tick":6000,"x":1550.6,"y":446.2,"w":437.5,"h":99.2},{"tick":8000,"x":1988.1,"y":446.2,"w":239.2,"h":99.2},{"tick":10000,"x":2227.3,"y":446.2,"w":433.1,"h":99.2},{"tick":12000,"x":25.6,"y":1128.3,"w":1448.4,"h":99.2},{"tick":14000,"x":1474.0,"y":1128.3,"w":1186.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293}}'>
+  <audio data-role="before" preload="metadata" src="audio/ii_v_related_placeholder_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/ii_v_related_placeholder_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/ii_v_related_placeholder_orig.mp3"></audio>
+    <audio controls src="audio/ii_v_related_placeholder_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="minor_for_dominant">
+<h3>ii-for-V swap</h3>
+<div class="fam">tune: <b title="jazzmus_0055__When_I_Lost_You">When I Lost You</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace a dominant with its own related ii (minor or half-diminished, a fourth below) — the ii/V interchangeability move applied to the chord itself.</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 1: replace D:7 with A:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/minor_for_dominant_orig.png" alt="ii-for-V swap — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/minor_for_dominant_after.png" alt="ii-for-V swap — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="minor_for_dominant" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":594.9,"h":99.2},{"tick":2000,"x":744.5,"y":490.6,"w":320.5,"h":99.2},{"tick":4000,"x":1065.0,"y":490.6,"w":360.6,"h":99.2},{"tick":6000,"x":1425.7,"y":490.6,"w":246.9,"h":99.2},{"tick":8000,"x":1672.5,"y":490.6,"w":426.8,"h":99.2},{"tick":10000,"x":2099.3,"y":490.6,"w":314.2,"h":99.2},{"tick":12000,"x":2413.5,"y":490.6,"w":246.9,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":410.2,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":594.9,"h":99.2},{"tick":2000,"x":744.5,"y":490.6,"w":320.5,"h":99.2},{"tick":4000,"x":1065.0,"y":490.6,"w":360.6,"h":99.2},{"tick":6000,"x":1425.7,"y":490.6,"w":246.9,"h":99.2},{"tick":8000,"x":1672.5,"y":490.6,"w":426.8,"h":99.2},{"tick":10000,"x":2099.3,"y":490.6,"w":314.2,"h":99.2},{"tick":12000,"x":2413.5,"y":490.6,"w":246.9,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":410.2,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/minor_for_dominant_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/minor_for_dominant_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/minor_for_dominant_orig.mp3"></audio>
+    <audio controls src="audio/minor_for_dominant_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h3 class="sub-head">Diminished usage</h3>
+
+<div class="card" id="common_tone_diminished">
+<h3>Common-tone diminished <span class="badge">also inserts</span></h3>
+<div class="fam">tune: <b title="jazzmus_0044__Little_Willie_Leaps">Little Willie Leaps</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A dim7 on the SAME root as the chord it embellishes (C6-Cdim-C6), replacing it or inserted after it under the beat-3 metric gate.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace B:min7 with B:dim7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/common_tone_diminished_orig.png" alt="Common-tone diminished — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/common_tone_diminished_after.png" alt="Common-tone diminished — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="common_tone_diminished" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":497.8,"w":782.2,"h":99.2},{"tick":2000,"x":931.8,"y":497.8,"w":580.3,"h":99.2},{"tick":4000,"x":1512.1,"y":497.8,"w":610.2,"h":99.2},{"tick":6000,"x":2122.3,"y":497.8,"w":538.0,"h":99.2},{"tick":8000,"x":25.6,"y":1179.9,"w":877.6,"h":99.2},{"tick":10000,"x":903.2,"y":1179.9,"w":588.8,"h":99.2},{"tick":12000,"x":1491.9,"y":1179.9,"w":501.4,"h":99.2},{"tick":14000,"x":1993.3,"y":1179.9,"w":667.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1361},"after":{"bars":[{"tick":0,"x":149.6,"y":498.8,"w":782.2,"h":99.2},{"tick":2000,"x":931.8,"y":498.8,"w":580.3,"h":99.2},{"tick":4000,"x":1512.1,"y":498.8,"w":610.2,"h":99.2},{"tick":6000,"x":2122.3,"y":498.8,"w":538.0,"h":99.2},{"tick":8000,"x":25.6,"y":1180.9,"w":877.6,"h":99.2},{"tick":10000,"x":903.2,"y":1180.9,"w":588.8,"h":99.2},{"tick":12000,"x":1491.9,"y":1180.9,"w":501.4,"h":99.2},{"tick":14000,"x":1993.3,"y":1180.9,"w":667.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1362}}'>
+  <audio data-role="before" preload="metadata" src="audio/common_tone_diminished_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/common_tone_diminished_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/common_tone_diminished_orig.mp3"></audio>
+    <audio controls src="audio/common_tone_diminished_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="diminished_for_dominant">
+<h3>Diminished for dominant</h3>
+<div class="fam">tune: <b title="jazzmus_0065__Oleo">Oleo</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A dominant is replaced by a dim7 rooted on its 3rd, 5th, 7th, or b9 — the rootless V7b9 voicing (Bdim7 = G7b9 without the root).</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 3: replace F:7 with C:dim7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/diminished_for_dominant_orig.png" alt="Diminished for dominant — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/diminished_for_dominant_after.png" alt="Diminished for dominant — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="diminished_for_dominant" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":749.0,"h":99.2},{"tick":2000,"x":898.6,"y":498.6,"w":559.5,"h":99.2},{"tick":4000,"x":1458.1,"y":498.6,"w":596.9,"h":99.2},{"tick":6000,"x":2055.0,"y":498.6,"w":605.3,"h":99.2},{"tick":8000,"x":25.6,"y":1180.7,"w":772.4,"h":99.2},{"tick":10000,"x":798.0,"y":1180.7,"w":632.9,"h":99.2},{"tick":12000,"x":1430.9,"y":1180.7,"w":596.6,"h":99.2},{"tick":14000,"x":2027.5,"y":1180.7,"w":632.9,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":749.0,"h":99.2},{"tick":2000,"x":898.6,"y":498.6,"w":559.5,"h":99.2},{"tick":4000,"x":1458.1,"y":498.6,"w":596.9,"h":99.2},{"tick":6000,"x":2055.0,"y":498.6,"w":605.3,"h":99.2},{"tick":8000,"x":25.6,"y":1180.7,"w":772.4,"h":99.2},{"tick":10000,"x":798.0,"y":1180.7,"w":632.9,"h":99.2},{"tick":12000,"x":1430.9,"y":1180.7,"w":596.6,"h":99.2},{"tick":14000,"x":2027.5,"y":1180.7,"w":632.9,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/diminished_for_dominant_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/diminished_for_dominant_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/diminished_for_dominant_orig.mp3"></audio>
+    <audio controls src="audio/diminished_for_dominant_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="diminished_passing">
+<h3>Diminished passing chord <span class="badge">also inserts</span></h3>
+<div class="fam">tune: <b title="jazzmus_0037__Central_Park_West">Central Park West</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A dim7 connects the surrounding chords by semitone root motion, ascending or descending; must be shorter than a full bar.</div>
+<div class="edit">Applied edit &mdash; bar 7, beat 4: insert C:dim7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/diminished_passing_orig.png" alt="Diminished passing chord — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/diminished_passing_after.png" alt="Diminished passing chord — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="diminished_passing" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":532.6,"w":726.4,"h":99.2},{"tick":2000,"x":876.0,"y":532.6,"w":419.6,"h":99.2},{"tick":4000,"x":1295.6,"y":532.6,"w":474.8,"h":99.2},{"tick":6000,"x":1770.4,"y":532.6,"w":482.9,"h":99.2},{"tick":8000,"x":2253.4,"y":532.6,"w":407.0,"h":99.2},{"tick":10000,"x":25.6,"y":1214.7,"w":1145.6,"h":99.2},{"tick":12000,"x":1171.2,"y":1214.7,"w":764.4,"h":99.2},{"tick":14000,"x":1935.6,"y":1214.7,"w":724.8,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1380},"after":{"bars":[{"tick":0,"x":149.6,"y":532.6,"w":726.4,"h":99.2},{"tick":2000,"x":876.0,"y":532.6,"w":419.6,"h":99.2},{"tick":4000,"x":1295.6,"y":532.6,"w":474.8,"h":99.2},{"tick":6000,"x":1770.4,"y":532.6,"w":482.9,"h":99.2},{"tick":8000,"x":2253.4,"y":532.6,"w":407.0,"h":99.2},{"tick":10000,"x":25.6,"y":1214.7,"w":1145.6,"h":99.2},{"tick":12000,"x":1171.2,"y":1214.7,"w":764.4,"h":99.2},{"tick":14000,"x":1935.6,"y":1214.7,"w":724.8,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1380}}'>
+  <audio data-role="before" preload="metadata" src="audio/diminished_passing_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/diminished_passing_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/diminished_passing_orig.mp3"></audio>
+    <audio controls src="audio/diminished_passing_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="diminished_resolution">
+<h3>Diminished resolution</h3>
+<div class="fam">tune: <b title="jazzmus_0019__Isfahan">Isfahan</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">An existing dim7 in the grid resolves: replaced by a stable chord a half-step away (up = passing resolution, down = return to the embellished chord). Keeps dim7 slots from being dead ends.</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 1: replace G:dim7 with F#:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/diminished_resolution_orig.png" alt="Diminished resolution — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/diminished_resolution_after.png" alt="Diminished resolution — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="diminished_resolution" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":710.5,"h":99.2},{"tick":2000,"x":860.1,"y":446.2,"w":451.3,"h":99.2},{"tick":4000,"x":1311.3,"y":446.2,"w":239.2,"h":99.2},{"tick":6000,"x":1550.6,"y":446.2,"w":437.5,"h":99.2},{"tick":8000,"x":1988.1,"y":446.2,"w":239.2,"h":99.2},{"tick":10000,"x":2227.3,"y":446.2,"w":433.1,"h":99.2},{"tick":12000,"x":25.6,"y":1128.3,"w":1448.4,"h":99.2},{"tick":14000,"x":1474.0,"y":1128.3,"w":1186.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293},"after":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":710.5,"h":99.2},{"tick":2000,"x":860.1,"y":446.2,"w":451.3,"h":99.2},{"tick":4000,"x":1311.3,"y":446.2,"w":239.2,"h":99.2},{"tick":6000,"x":1550.6,"y":446.2,"w":437.5,"h":99.2},{"tick":8000,"x":1988.1,"y":446.2,"w":239.2,"h":99.2},{"tick":10000,"x":2227.3,"y":446.2,"w":433.1,"h":99.2},{"tick":12000,"x":25.6,"y":1128.3,"w":1448.4,"h":99.2},{"tick":14000,"x":1474.0,"y":1128.3,"w":1186.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293}}'>
+  <audio data-role="before" preload="metadata" src="audio/diminished_resolution_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/diminished_resolution_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/diminished_resolution_orig.mp3"></audio>
+    <audio controls src="audio/diminished_resolution_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h3 class="sub-head">Modal interchange and the minor-key palette</h3>
+
+<div class="card" id="chromatic_mediant_major">
+<h3>Chromatic mediants</h3>
+<div class="fam">tune: <b title="jazzmus_0075__Bemsha_Swing">Bemsha Swing</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A major chord moves to a major chord a chromatic-mediant away (roots 3 or 4 semitones apart, either direction): Cmaj7 -> Abmaj7 / Ebmaj7 / Emaj7 / Amaj7.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace F:maj7 with Db:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/chromatic_mediant_major_orig.png" alt="Chromatic mediants — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/chromatic_mediant_major_after.png" alt="Chromatic mediants — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="chromatic_mediant_major" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":489.6,"w":574.8,"h":99.2},{"tick":2000,"x":724.4,"y":489.6,"w":609.5,"h":99.2},{"tick":4000,"x":1333.9,"y":489.6,"w":475.6,"h":99.2},{"tick":6000,"x":1809.5,"y":489.6,"w":437.3,"h":99.2},{"tick":8000,"x":2246.8,"y":489.6,"w":413.5,"h":99.2},{"tick":10000,"x":25.6,"y":1171.7,"w":1127.7,"h":99.2},{"tick":12000,"x":1153.3,"y":1171.7,"w":786.2,"h":99.2},{"tick":14000,"x":1939.5,"y":1171.7,"w":720.9,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":574.8,"h":99.2},{"tick":2000,"x":724.4,"y":498.6,"w":609.5,"h":99.2},{"tick":4000,"x":1333.9,"y":498.6,"w":475.6,"h":99.2},{"tick":6000,"x":1809.5,"y":498.6,"w":437.3,"h":99.2},{"tick":8000,"x":2246.8,"y":498.6,"w":413.5,"h":99.2},{"tick":10000,"x":25.6,"y":1180.7,"w":1127.7,"h":99.2},{"tick":12000,"x":1153.3,"y":1180.7,"w":786.2,"h":99.2},{"tick":14000,"x":1939.5,"y":1180.7,"w":720.9,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1355}}'>
+  <audio data-role="before" preload="metadata" src="audio/chromatic_mediant_major_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/chromatic_mediant_major_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/chromatic_mediant_major_orig.mp3"></audio>
+    <audio controls src="audio/chromatic_mediant_major_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="neapolitan_to_minor">
+<h3>Minor palette: Neapolitan bII</h3>
+<div class="fam">tune: <b title="jazzmus_0051__So_What">So What</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the major chord on the flat second degree (Dbmaj7 in C minor) — the Neapolitan predominant.</div>
+<div class="edit">Applied edit &mdash; bar 3, beat 1: replace Eb:min7 with Eb:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/neapolitan_to_minor_orig.png" alt="Minor palette: Neapolitan bII — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/neapolitan_to_minor_after.png" alt="Minor palette: Neapolitan bII — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="neapolitan_to_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":820.8,"h":99.2},{"tick":2000,"x":970.4,"y":446.2,"w":635.2,"h":99.2},{"tick":4000,"x":1605.6,"y":446.2,"w":419.5,"h":99.2},{"tick":6000,"x":2025.1,"y":446.2,"w":635.2,"h":99.2},{"tick":8000,"x":25.6,"y":1128.3,"w":734.3,"h":99.2},{"tick":10000,"x":759.8,"y":1128.3,"w":784.0,"h":99.2},{"tick":12000,"x":1543.8,"y":1128.3,"w":528.9,"h":99.2},{"tick":14000,"x":2072.7,"y":1128.3,"w":587.6,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293},"after":{"bars":[{"tick":0,"x":149.6,"y":446.2,"w":820.8,"h":99.2},{"tick":2000,"x":970.4,"y":446.2,"w":635.2,"h":99.2},{"tick":4000,"x":1605.6,"y":446.2,"w":419.5,"h":99.2},{"tick":6000,"x":2025.1,"y":446.2,"w":635.2,"h":99.2},{"tick":8000,"x":25.6,"y":1128.3,"w":734.3,"h":99.2},{"tick":10000,"x":759.8,"y":1128.3,"w":784.0,"h":99.2},{"tick":12000,"x":1543.8,"y":1128.3,"w":528.9,"h":99.2},{"tick":14000,"x":2072.7,"y":1128.3,"w":587.6,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1293}}'>
+  <audio data-role="before" preload="metadata" src="audio/neapolitan_to_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/neapolitan_to_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/neapolitan_to_minor_orig.mp3"></audio>
+    <audio controls src="audio/neapolitan_to_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="bIII_pre_dominant_minor">
+<h3>Minor palette: bIII before V</h3>
+<div class="fam">tune: <b title="jazzmus_0040__Gentle_Rain">Gentle Rain</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the major chord on the flat third degree when the NEXT chord's root is the key's fifth degree (Ebmaj7 before G7 in C minor). V-degree gate corpus-validated 2026-06-09.</div>
+<div class="edit">Applied edit &mdash; bar 3, beat 1: replace B:hdim7 with C:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/bIII_pre_dominant_minor_orig.png" alt="Minor palette: bIII before V — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/bIII_pre_dominant_minor_after.png" alt="Minor palette: bIII before V — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="bIII_pre_dominant_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/bIII_pre_dominant_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/bIII_pre_dominant_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/bIII_pre_dominant_minor_orig.mp3"></audio>
+    <audio controls src="audio/bIII_pre_dominant_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="minor_key_vi_to_i">
+<h3>Minor palette: bVI</h3>
+<div class="fam">tune: <b title="jazzmus_0040__Gentle_Rain">Gentle Rain</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the major chord on the flat sixth degree (Abmaj7 in C minor).</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace A:min7 with F:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/minor_key_vi_to_i_orig.png" alt="Minor palette: bVI — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/minor_key_vi_to_i_after.png" alt="Minor palette: bVI — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="minor_key_vi_to_i" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":489.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":489.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":489.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":489.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":489.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":489.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":489.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1171.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1337}}'>
+  <audio data-role="before" preload="metadata" src="audio/minor_key_vi_to_i_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/minor_key_vi_to_i_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/minor_key_vi_to_i_orig.mp3"></audio>
+    <audio controls src="audio/minor_key_vi_to_i_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="half_dim_predominant_to_minor">
+<h3>Minor palette: ii-half-dim predominant</h3>
+<div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the half-diminished seventh on the second degree (Dm7b5 in C minor) — THE minor-key predominant (iio7 -> V7 -> i). Degree anchoring corpus-corrected 2026-06-12.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace Eb:min7 with C:hdim7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/half_dim_predominant_to_minor_orig.png" alt="Minor palette: ii-half-dim predominant — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/half_dim_predominant_to_minor_after.png" alt="Minor palette: ii-half-dim predominant — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="half_dim_predominant_to_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407},"after":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407}}'>
+  <audio data-role="before" preload="metadata" src="audio/half_dim_predominant_to_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/half_dim_predominant_to_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/half_dim_predominant_to_minor_orig.mp3"></audio>
+    <audio controls src="audio/half_dim_predominant_to_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="mixture_IV_to_minor">
+<h3>Minor palette: major IV</h3>
+<div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the MAJOR chord on the fourth degree (Fmaj7 in C minor — the Dorian/melodic-minor borrowing).</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace Eb:min7 with Eb:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/mixture_IV_to_minor_orig.png" alt="Minor palette: major IV — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/mixture_IV_to_minor_after.png" alt="Minor palette: major IV — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="mixture_IV_to_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407},"after":{"bars":[{"tick":0,"x":149.6,"y":493.6,"w":861.0,"h":99.2},{"tick":2000,"x":1010.6,"y":493.6,"w":519.1,"h":99.2},{"tick":4000,"x":1529.7,"y":493.6,"w":557.0,"h":99.2},{"tick":6000,"x":2086.7,"y":493.6,"w":573.7,"h":99.2},{"tick":8000,"x":25.6,"y":1175.7,"w":890.3,"h":99.2},{"tick":10000,"x":915.9,"y":1175.7,"w":413.9,"h":99.2},{"tick":12000,"x":1329.8,"y":1175.7,"w":622.0,"h":99.2},{"tick":14000,"x":1951.9,"y":1175.7,"w":708.5,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1407}}'>
+  <audio data-role="before" preload="metadata" src="audio/mixture_IV_to_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/mixture_IV_to_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/mixture_IV_to_minor_orig.mp3"></audio>
+    <audio controls src="audio/mixture_IV_to_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="modal_subtonic_to_minor">
+<h3>Minor palette: subtonic bVII</h3>
+<div class="fam">tune: <b title="jazzmus_0040__Gentle_Rain">Gentle Rain</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">In a minor key, place the major chord on the flat seventh degree (Bbmaj7 in C minor).</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace A:min7 with G:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/modal_subtonic_to_minor_orig.png" alt="Minor palette: subtonic bVII — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/modal_subtonic_to_minor_after.png" alt="Minor palette: subtonic bVII — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="modal_subtonic_to_minor" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":517.8,"h":99.2},{"tick":2000,"x":667.4,"y":490.6,"w":349.8,"h":99.2},{"tick":4000,"x":1017.2,"y":490.6,"w":349.8,"h":99.2},{"tick":6000,"x":1367.0,"y":490.6,"w":349.8,"h":99.2},{"tick":8000,"x":1716.8,"y":490.6,"w":252.4,"h":99.2},{"tick":10000,"x":1969.3,"y":490.6,"w":438.7,"h":99.2},{"tick":12000,"x":2407.9,"y":490.6,"w":252.4,"h":99.2},{"tick":14000,"x":25.6,"y":1172.7,"w":409.0,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/modal_subtonic_to_minor_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/modal_subtonic_to_minor_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/modal_subtonic_to_minor_orig.mp3"></audio>
+    <audio controls src="audio/modal_subtonic_to_minor_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="modal_interchange">
+<h3>Modal interchange (major keys)</h3>
+<div class="fam">tune: <b title="jazzmus_0083__Well,_you_neednt">Well, you neednt</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Replace with a chord borrowed from the parallel natural minor: i, ii-half-dim, bIII, iv, v, bVI, bVII7, bVIImaj7.</div>
+<div class="edit">Applied edit &mdash; bar 1, beat 1: replace F:7 with C:min7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/modal_interchange_orig.png" alt="Modal interchange (major keys) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/modal_interchange_after.png" alt="Modal interchange (major keys) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="modal_interchange" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":489.6,"w":793.3,"h":99.2},{"tick":2000,"x":942.9,"y":489.6,"w":571.1,"h":99.2},{"tick":4000,"x":1514.1,"y":489.6,"w":586.7,"h":99.2},{"tick":6000,"x":2100.7,"y":489.6,"w":559.6,"h":99.2},{"tick":8000,"x":25.6,"y":1171.7,"w":799.5,"h":99.2},{"tick":10000,"x":825.1,"y":1171.7,"w":619.9,"h":99.2},{"tick":12000,"x":1445.0,"y":1171.7,"w":647.7,"h":99.2},{"tick":14000,"x":2092.7,"y":1171.7,"w":567.7,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1365},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":793.3,"h":99.2},{"tick":2000,"x":942.9,"y":490.6,"w":571.1,"h":99.2},{"tick":4000,"x":1514.1,"y":490.6,"w":586.7,"h":99.2},{"tick":6000,"x":2100.7,"y":490.6,"w":559.6,"h":99.2},{"tick":8000,"x":25.6,"y":1172.7,"w":799.5,"h":99.2},{"tick":10000,"x":825.1,"y":1172.7,"w":619.9,"h":99.2},{"tick":12000,"x":1445.0,"y":1172.7,"w":647.7,"h":99.2},{"tick":14000,"x":2092.7,"y":1172.7,"w":567.7,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1366}}'>
+  <audio data-role="before" preload="metadata" src="audio/modal_interchange_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/modal_interchange_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/modal_interchange_orig.mp3"></audio>
+    <audio controls src="audio/modal_interchange_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+
+<div class="card" id="plagal_cadence">
+<h3>Plagal cadence</h3>
+<div class="fam">tune: <b title="jazzmus_0006__Aint_Misbehavin">Aint Misbehavin</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">The slot before a tonic-family target receives its IV, mode-matched (IV -> I major, iv -> i minor).</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 3: replace Bb:7 with Ab:maj7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/plagal_cadence_orig.png" alt="Plagal cadence — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/plagal_cadence_after.png" alt="Plagal cadence — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="plagal_cadence" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":606.4,"h":99.2},{"tick":2000,"x":756.0,"y":490.6,"w":344.5,"h":99.2},{"tick":4000,"x":1100.5,"y":490.6,"w":509.5,"h":99.2},{"tick":6000,"x":1610.0,"y":490.6,"w":464.7,"h":99.2},{"tick":8000,"x":2074.7,"y":490.6,"w":585.7,"h":99.2},{"tick":10000,"x":25.6,"y":1172.7,"w":1037.4,"h":99.2},{"tick":12000,"x":1063.0,"y":1172.7,"w":767.0,"h":99.2},{"tick":14000,"x":1830.0,"y":1172.7,"w":830.4,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":606.4,"h":99.2},{"tick":2000,"x":756.0,"y":490.6,"w":344.5,"h":99.2},{"tick":4000,"x":1100.5,"y":490.6,"w":509.5,"h":99.2},{"tick":6000,"x":1610.0,"y":490.6,"w":464.7,"h":99.2},{"tick":8000,"x":2074.7,"y":490.6,"w":585.7,"h":99.2},{"tick":10000,"x":25.6,"y":1172.7,"w":1037.4,"h":99.2},{"tick":12000,"x":1063.0,"y":1172.7,"w":767.0,"h":99.2},{"tick":14000,"x":1830.0,"y":1172.7,"w":830.4,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/plagal_cadence_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/plagal_cadence_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/plagal_cadence_orig.mp3"></audio>
+    <audio controls src="audio/plagal_cadence_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h2 class="fam-head" id="mv-delete">DELETE <span class="count">(1) &mdash; removes a chord; the previous one sustains</span></h2>
+
+<div class="card" id="delete">
+<h3>Delete (structural move)</h3>
+<div class="fam">tune: <b title="jazzmus_0002__Love_Walked_In">Love Walked In</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">Removes a chord onset so the previous chord sustains — the pruning move. The first and last occupied chords are protected (window cadence).</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 4: delete Eb:7 (previous chord sustains)</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/delete_orig.png" alt="Delete (structural move) — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/delete_after.png" alt="Delete (structural move) — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="delete" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":496.3,"h":99.2},{"tick":2000,"x":645.9,"y":498.6,"w":406.1,"h":99.2},{"tick":4000,"x":1052.0,"y":498.6,"w":300.8,"h":99.2},{"tick":6000,"x":1352.8,"y":498.6,"w":389.3,"h":99.2},{"tick":8000,"x":1742.1,"y":498.6,"w":292.1,"h":99.2},{"tick":10000,"x":2034.2,"y":498.6,"w":389.3,"h":99.2},{"tick":12000,"x":2423.5,"y":498.6,"w":236.9,"h":99.2},{"tick":14000,"x":25.6,"y":1180.7,"w":546.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346},"after":{"bars":[{"tick":0,"x":149.6,"y":498.6,"w":498.0,"h":99.2},{"tick":2000,"x":647.6,"y":498.6,"w":392.3,"h":99.2},{"tick":4000,"x":1039.9,"y":498.6,"w":303.1,"h":99.2},{"tick":6000,"x":1343.0,"y":498.6,"w":392.3,"h":99.2},{"tick":8000,"x":1735.2,"y":498.6,"w":294.3,"h":99.2},{"tick":10000,"x":2029.5,"y":498.6,"w":392.3,"h":99.2},{"tick":12000,"x":2421.8,"y":498.6,"w":238.6,"h":99.2},{"tick":14000,"x":25.6,"y":1180.7,"w":546.3,"h":99.2}],"t0":0,"spt":0.001,"end":16.0,"w":2685,"h":1346}}'>
+  <audio data-role="before" preload="metadata" src="audio/delete_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/delete_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/delete_orig.mp3"></audio>
+    <audio controls src="audio/delete_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<h2 class="fam-head" id="mv-split">SPLIT <span class="count">(1) &mdash; subdivides a chord's span</span></h2>
+
+<div class="card" id="split">
+<h3>ii-V split</h3>
+<div class="fam">tune: <b title="jazzmus_0001__Artillerie_Lourde">Artillerie Lourde</b>
+  <a class="totop" href="#menu">&uarr; rules</a></div>
+<div class="desc">A dominant on a mid-bar half-bar span is subdivided: its related ii lands on beat 3 and the dominant is displaced to beat 4 — the quick quarter-note ii-V (C | G7 -> C | Dm7 G7).</div>
+<div class="edit">Applied edit &mdash; bar 2, beat 3: split G:7 into D:min7 + G:7</div>
+<div class="row">
+  <div class="side"><div class="lbl">BEFORE (published)</div>
+    <div class="sheet" data-role="before">
+      <img src="images/split_orig.png" alt="ii-V split — published harmony">
+      <span class="ph"></span></div></div>
+  <div class="side"><div class="lbl">AFTER (rule applied)</div>
+    <div class="sheet" data-role="after">
+      <img src="images/split_after.png" alt="ii-V split — after the rule is applied">
+      <span class="ph"></span></div></div>
+</div>
+
+<div class="ab" data-card="split" data-geom='{"before":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":697.8,"h":99.2},{"tick":1600,"x":847.4,"y":490.6,"w":641.6,"h":99.2},{"tick":3200,"x":1489.0,"y":490.6,"w":529.8,"h":99.2},{"tick":4800,"x":2018.8,"y":490.6,"w":641.6,"h":99.2},{"tick":6400,"x":25.6,"y":1172.7,"w":724.8,"h":99.2},{"tick":8000,"x":750.4,"y":1172.7,"w":731.0,"h":99.2},{"tick":9600,"x":1481.3,"y":1172.7,"w":567.4,"h":99.2},{"tick":11200,"x":2048.7,"y":1172.7,"w":611.7,"h":99.2}],"t0":0,"spt":0.001,"end":12.8,"w":2685,"h":1338},"after":{"bars":[{"tick":0,"x":149.6,"y":490.6,"w":697.8,"h":99.2},{"tick":1600,"x":847.4,"y":490.6,"w":641.6,"h":99.2},{"tick":3200,"x":1489.0,"y":490.6,"w":529.8,"h":99.2},{"tick":4800,"x":2018.8,"y":490.6,"w":641.6,"h":99.2},{"tick":6400,"x":25.6,"y":1172.7,"w":724.8,"h":99.2},{"tick":8000,"x":750.4,"y":1172.7,"w":731.0,"h":99.2},{"tick":9600,"x":1481.3,"y":1172.7,"w":567.4,"h":99.2},{"tick":11200,"x":2048.7,"y":1172.7,"w":611.7,"h":99.2}],"t0":0,"spt":0.001,"end":12.8,"w":2685,"h":1338}}'>
+  <audio data-role="before" preload="metadata" src="audio/split_orig.mp3"></audio>
+  <audio data-role="after"  preload="metadata" src="audio/split_after.mp3"></audio>
+  <button class="play" type="button">&#9654; Play</button>
+  <span class="seek"><input type="range" min="0" max="1000" value="0"></span>
+  <span class="tog">
+    <button type="button" class="sidebtn on" data-side="before">BEFORE</button>
+    <button type="button" class="sidebtn"    data-side="after">AFTER</button>
+  </span>
+  <noscript>
+    <audio controls src="audio/split_orig.mp3"></audio>
+    <audio controls src="audio/split_after.mp3"></audio>
+  </noscript>
+</div>
+</div>
+<p style='color:#777'>A cursor tracks the music on the staff while a clip plays. Bar positions come from MuseScore's own measure export, so the cursor follows the engraving rather than an assumed layout.</p>
+<script>
+document.querySelectorAll('.ab').forEach(function (ab) {
+  var a = {before: ab.querySelector('[data-role=before]'),
+           after:  ab.querySelector('[data-role=after]')};
+  var cur = 'before', playBtn = ab.querySelector('.play'),
+      seek = ab.querySelector('input[type=range]');
+
+  // ---- running playhead -------------------------------------------------
+  // Bar boxes come from MuseScore's own .mpos export, in the cropped image's
+  // pixel space, so we rescale by the image's displayed width. Bars are 4/4 and
+  // equal, so bar i starts at i * (end / nbars) -- no tick arithmetic needed here.
+  var card = ab.closest('.card'), geom = null;
+  try { geom = ab.dataset.geom ? JSON.parse(ab.dataset.geom) : null; } catch (e) { geom = null; }
+  var sheets = {}, phs = {};
+  if (card) {
+    ['before', 'after'].forEach(function (k) {
+      sheets[k] = card.querySelector('.sheet[data-role=' + k + ']');
+      phs[k] = sheets[k] ? sheets[k].querySelector('.ph') : null;
+    });
+  }
+  function hidePh() {
+    ['before', 'after'].forEach(function (k) { if (phs[k]) phs[k].classList.remove('on'); });
+  }
+  function drawPh(t) {
+    if (!geom || !phs[cur] || !sheets[cur]) return;
+    var g = geom[cur], img = sheets[cur].querySelector('img'), ph = phs[cur];
+    if (!g || !img || !img.clientWidth) return;
+    ['before', 'after'].forEach(function (k) {
+      if (k !== cur && phs[k]) phs[k].classList.remove('on');
+    });
+    var n = g.bars.length, barDur = g.end / n;
+    if (t < 0 || t >= g.end) { ph.classList.remove('on'); return; }
+    var i = Math.min(n - 1, Math.floor(t / barDur)), b = g.bars[i];
+    var f = (t - i * barDur) / barDur;
+    var s = img.clientWidth / g.w;                 // natural px -> displayed px
+    // span the chord symbols above the staff as well as the staff itself
+    var top = (b.y - 0.95 * b.h) * s, h = b.h * 2.15 * s;
+    ph.style.left = ((b.x + f * b.w) * s) + 'px';
+    ph.style.top = Math.max(0, top) + 'px';
+    ph.style.height = h + 'px';
+    ph.classList.add('on');
+  }
+
+  // If either clip fails to load, fall back to two plain players.
+  var failed = 0;
+  ['before', 'after'].forEach(function (k) {
+    a[k].addEventListener('error', function () {
+      if (++failed === 1) {
+        ab.innerHTML = '<audio controls src="' + a.before.src + '"></audio>' +
+                       '<audio controls src="' + a.after.src + '"></audio>';
+      }
+    });
+  });
+
+  playBtn.addEventListener('click', function () {
+    if (a[cur].paused) {
+      a[cur].play(); playBtn.innerHTML = '&#10073;&#10073; Pause'; drawPh(a[cur].currentTime);
+    } else {
+      a[cur].pause(); playBtn.innerHTML = '&#9654; Play';
+    }
+  });
+
+  ab.querySelectorAll('.sidebtn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = btn.dataset.side;
+      if (next === cur) return;
+      var t = a[cur].currentTime, playing = !a[cur].paused;
+      a[cur].pause();
+      cur = next;
+      // keep the playhead: the two clips are the same eight bars at the same tempo
+      a[cur].currentTime = Math.min(t, a[cur].duration || t);
+      if (playing) a[cur].play();
+      ab.querySelectorAll('.sidebtn').forEach(function (b) {
+        b.classList.toggle('on', b.dataset.side === cur);
+      });
+      drawPh(a[cur].currentTime);
+    });
+  });
+
+  ['before', 'after'].forEach(function (k) {
+    a[k].addEventListener('timeupdate', function () {
+      if (k !== cur || !a[k].duration) return;
+      seek.value = 1000 * a[k].currentTime / a[k].duration;
+      drawPh(a[k].currentTime);
+    });
+    a[k].addEventListener('ended', function () {
+      if (k === cur) { playBtn.innerHTML = '&#9654; Play'; hidePh(); }
+    });
+    a[k].addEventListener('pause', function () {
+      if (k === cur && a[k].ended) hidePh();
+    });
+  });
+
+  seek.addEventListener('input', function () {
+    if (a[cur].duration) {
+      a[cur].currentTime = a[cur].duration * seek.value / 1000;
+      drawPh(a[cur].currentTime);
+    }
+  });
+
+  window.addEventListener('resize', function () {
+    if (!a[cur].paused || a[cur].currentTime > 0) drawPh(a[cur].currentTime);
+  });
+});
+</script>
+
+<hr>
+<p class="rights">Eight-bar excerpts, presented as research commentary alongside the
+analysis they illustrate. Audio is a synthesized rendering from chord symbols, not a
+recording. Non-commercial; no full scores are distributed. Lead-sheet sources: the
+JazzMus corpus (CC&nbsp;BY-NC&nbsp;4.0) and the Wikifonia archive. If you hold rights
+in any material here and would like it removed, contact
+<a href="mailto:alonyamin0@gmail.com">alonyamin0@gmail.com</a>.</p>
