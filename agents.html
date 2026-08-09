@@ -1,0 +1,651 @@
+<!doctype html>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>Five agents, five tunes &mdash; jazz reharmonization</title>
+<style>
+:root{--ink:#1b1b1b;--muted:#666;--line:#e6e6e6;--hl:#C99700;--link:#1a56a0}
+*{box-sizing:border-box}
+body{max-width:900px;margin:0 auto;padding:2em 1.2em 4em;color:var(--ink);
+     font:16px/1.55 Georgia,'Times New Roman',serif}
+h1{font-size:1.6em;margin:0 0 .2em}
+h2{font-size:1.15em;margin:2.4em 0 .1em;border-bottom:1px solid var(--line);
+   padding-bottom:.3em}
+.lede,.why{color:var(--muted);font-size:.95em}
+.why{margin:.4em 0 1.2em;font-style:italic}
+a{color:var(--link)}
+.nav{font-size:.9em;margin-bottom:1.6em}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin:.8em 0}
+.tab{border:1px solid #dde3ea;border-radius:14px;padding:3px 11px;font-size:.85em;
+     cursor:pointer;background:#fff;font-family:inherit;color:var(--link)}
+.tab[aria-selected=true]{background:#1a56a0;border-color:#1a56a0;color:#fff}
+.card{border:1px solid var(--line);border-radius:10px;padding:1em 1.1em;margin:.6em 0 0}
+.card[hidden]{display:none}
+.armline{font-size:.9em;color:var(--muted);margin:0 0 .7em}
+.sheets{display:grid;gap:.5em}
+.sheet{position:relative}
+.sheet img{width:100%;display:block}
+.sheet[hidden]{display:none}
+.ph{position:absolute;width:2px;background:#c0392b;opacity:0;pointer-events:none;
+    transition:opacity .12s;box-shadow:0 0 3px rgba(192,57,43,.5)}
+.ph.on{opacity:.85}
+.ab{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:.6em 0 .2em}
+.play,.sidebtn{border:1px solid #dde3ea;background:#fff;border-radius:14px;
+               padding:3px 12px;font-size:.85em;cursor:pointer;font-family:inherit}
+.sidebtn[aria-pressed=true]{background:#eef3f9;border-color:var(--link)}
+.ab input[type=range]{flex:1;min-width:140px}
+ol.edits{font-size:.9em;padding-left:1.3em;margin:.8em 0 .2em}
+ol.edits li{margin:.18em 0}
+.chip{font-size:.82em;border-radius:10px;padding:1px 8px;margin-left:6px;
+      white-space:nowrap;font-family:inherit}
+.chip.rule{background:#fdf3d6;border:1px solid #e6d089;color:#6b5200}
+.chip.off{background:#f2f2f2;border:1px solid #ddd;color:#666}
+.mark{color:var(--hl)}
+details{font-size:.88em;color:var(--muted);margin-top:.5em}
+.foot{margin-top:3em;font-size:.85em;color:var(--muted);border-top:1px solid var(--line);
+      padding-top:1em}
+@media (max-width:640px){body{padding:1.2em .8em 3em}}
+</style>
+<p class=nav><a href="index.html">&larr; the reharmonization moves</a></p>
+<h1>Five agents, five tunes</h1>
+<p class=lede>Each card is one eight-bar window: the published chart against one
+agent's reharmonization of it, from the same melody. Press play and the cursor
+follows the music; the <b>Chart</b> / <b>Agent</b> buttons switch sides without
+losing your place. On the agent's sheet the chords it changed are
+<span class=mark>in yellow</span>, and every edit below is tagged with the theory
+rule it fired &mdash; or <span class='chip off'>off book</span> when it satisfies
+none; bar numbers below count from the start of the window, as printed on the sheet.
+The five agents differ only in edit budget, whether they may delete, and how
+far outside the rulebook they explore; <i>Unruled</i> was trained without the
+rulebook at all. All 5 tunes are held out: neither the agents nor the
+reward model saw them in training.</p>
+<h2>Don&#x27;t Get Around Much Anymore</h2>
+<p class=why>The widest range of theory in the set: thirteen distinct rules fire across the five agents, and every agent gains most here.</p>
+<div class=tabs role=tablist data-tabs><button class=tab role=tab data-card='t0a0' aria-selected='true'>Terse</button><button class=tab role=tab data-card='t0a1' aria-selected='false'>Tight</button><button class=tab role=tab data-card='t0a2' aria-selected='false'>Curious</button><button class=tab role=tab data-card='t0a3' aria-selected='false'>Long</button><button class=tab role=tab data-card='t0a4' aria-selected='false'>Unruled</button></div>
+<div class=card id='t0a0' >
+<p class=armline><b>Terse</b> &mdash; cap 4 edits, cannot delete.
+4 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t0_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t0a0.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 699.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 848.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1320.0, &quot;y&quot;: 490.6, &quot;w&quot;: 469.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1789.9, &quot;y&quot;: 490.6, &quot;w&quot;: 509.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2299.4, &quot;y&quot;: 490.6, &quot;w&quot;: 361.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 672.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 822.2, &quot;y&quot;: 490.6, &quot;w&quot;: 486.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1308.6, &quot;y&quot;: 490.6, &quot;w&quot;: 458.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1766.7, &quot;y&quot;: 490.6, &quot;w&quot;: 523.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2290.3, &quot;y&quot;: 490.6, &quot;w&quot;: 370.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t0_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t0a0.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 3.2: Cmaj7 &rarr; <span class=mark>Bb7</span><span class='chip rule'>modal interchange</span><span class='chip rule'>chromatic approach</span></li><li>bar 7.3: insert <span class=mark>D7</span><span class='chip rule'>dominant approach</span></li><li>bar 1.4: Ebm7 &rarr; <span class=mark>Fm7</span><span class='chip rule'>dominant approach replace minor</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 1.2: Cmaj7 &rarr; <span class=mark>Am7</span><span class='chip rule'>functional substitution</span></li></ol>
+</div><div class=card id='t0a1' hidden>
+<p class=armline><b>Tight</b> &mdash; cap 6 edits, the tightest explorer.
+6 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t0_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t0a1.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 699.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 848.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1320.0, &quot;y&quot;: 490.6, &quot;w&quot;: 469.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1789.9, &quot;y&quot;: 490.6, &quot;w&quot;: 509.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2299.4, &quot;y&quot;: 490.6, &quot;w&quot;: 361.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 650.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 799.6, &quot;y&quot;: 489.6, &quot;w&quot;: 487.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1286.7, &quot;y&quot;: 489.6, &quot;w&quot;: 479.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1765.7, &quot;y&quot;: 489.6, &quot;w&quot;: 524.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2289.9, &quot;y&quot;: 489.6, &quot;w&quot;: 370.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 820.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 820.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 820.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1010}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t0_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t0a1.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 1.4: remove Ebm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 7.4: insert <span class=mark>Ab7</span><span class='chip rule'>chromatic approach</span></li><li>bar 1.2: Cmaj7 &rarr; <span class=mark>Em7</span><span class='chip rule'>functional substitution</span></li><li>bar 7.1: Cmaj7 &rarr; <span class=mark>Am7</span><span class='chip rule'>deceptive cadence</span><span class='chip rule'>functional substitution</span></li><li>bar 6.4: insert <span class=mark>Abm7</span><span class='chip rule'>chromatic approach</span></li><li>bar 6.4: Abm7 &rarr; <span class=mark>Abdim7</span><span class='chip rule'>diminished passing</span><span class='chip rule'>common tone diminished</span></li></ol>
+</div><div class=card id='t0a2' hidden>
+<p class=armline><b>Curious</b> &mdash; cap 8 edits, explores off the book most.
+8 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t0_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t0a2.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 699.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 848.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1320.0, &quot;y&quot;: 490.6, &quot;w&quot;: 469.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1789.9, &quot;y&quot;: 490.6, &quot;w&quot;: 509.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2299.4, &quot;y&quot;: 490.6, &quot;w&quot;: 361.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 678.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 828.5, &quot;y&quot;: 490.6, &quot;w&quot;: 470.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1298.9, &quot;y&quot;: 490.6, &quot;w&quot;: 445.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1744.4, &quot;y&quot;: 490.6, &quot;w&quot;: 508.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2253.2, &quot;y&quot;: 490.6, &quot;w&quot;: 407.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 821.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 821.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1011}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t0_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t0a2.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 1.4: remove Ebm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 3.2: remove Cmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 5.4: insert <span class=mark>Ab7</span><span class='chip rule'>chromatic approach</span></li><li>bar 6.3: insert <span class=mark>G7</span><span class='chip rule'>dominant approach</span></li><li>bar 1.3: Dm7 &rarr; <span class=mark>Fmaj7</span><span class='chip rule'>functional substitution</span></li><li>bar 7.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 4.3: insert <span class=mark>A7</span><span class='chip rule'>dominant approach</span></li><li>bar 4.3: A7 &rarr; <span class=mark>Dbdim7</span><span class='chip rule'>diminished for dominant</span></li></ol>
+</div><div class=card id='t0a3' hidden>
+<p class=armline><b>Long</b> &mdash; cap 10 edits, pays most per edit.
+10 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t0_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t0a3.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 699.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 848.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1320.0, &quot;y&quot;: 490.6, &quot;w&quot;: 469.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1789.9, &quot;y&quot;: 490.6, &quot;w&quot;: 509.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2299.4, &quot;y&quot;: 490.6, &quot;w&quot;: 361.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 638.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 787.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1259.6, &quot;y&quot;: 490.6, &quot;w&quot;: 446.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1706.2, &quot;y&quot;: 490.6, &quot;w&quot;: 546.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2252.3, &quot;y&quot;: 490.6, &quot;w&quot;: 408.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 821.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 821.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1011}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t0_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t0a3.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 4.3: insert <span class=mark>A7</span><span class='chip rule'>dominant approach</span></li><li>bar 1.4: remove Ebm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 5.4: insert <span class=mark>Ab7</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.2: remove Cmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 7.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 6.3: insert <span class=mark>G7</span><span class='chip rule'>dominant approach</span></li><li>bar 4.2: insert <span class=mark>Bb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 1.3: remove Dm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 2.1: insert <span class=mark>Am7</span><span class='chip rule'>harmonic fill</span></li><li>bar 1.3: insert <span class=mark>E7</span><span class='chip rule'>dominant approach</span></li></ol>
+</div><div class=card id='t0a4' hidden>
+<p class=armline><b>Unruled</b> &mdash; cap 10 edits, trained without the rulebook.
+10 edits, 6 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t0_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t0a4.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 699.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 848.8, &quot;y&quot;: 490.6, &quot;w&quot;: 471.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1320.0, &quot;y&quot;: 490.6, &quot;w&quot;: 469.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1789.9, &quot;y&quot;: 490.6, &quot;w&quot;: 509.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2299.4, &quot;y&quot;: 490.6, &quot;w&quot;: 361.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 819.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 819.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 819.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1009}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 639.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 789.4, &quot;y&quot;: 489.6, &quot;w&quot;: 496.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1285.8, &quot;y&quot;: 489.6, &quot;w&quot;: 465.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1751.6, &quot;y&quot;: 489.6, &quot;w&quot;: 532.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2284.5, &quot;y&quot;: 489.6, &quot;w&quot;: 375.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 818.7, &quot;w&quot;: 1068.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1094.3, &quot;y&quot;: 818.7, &quot;w&quot;: 725.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1819.8, &quot;y&quot;: 818.7, &quot;w&quot;: 840.6, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1008}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t0_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t0a4.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 1.2: Cmaj7 &rarr; <span class=mark>Dm7</span><span class='chip off'>off book</span></li><li>bar 1.4: Ebm7 &rarr; <span class=mark>Fmaj7</span><span class='chip rule'>plagal cadence</span></li><li>bar 1.4: Fmaj7 &rarr; <span class=mark>Db7</span><span class='chip off'>off book</span></li><li>bar 5.1: Dm7 &rarr; <span class=mark>Dm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 3.2: remove Cmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 2.1: insert <span class=mark>Cmaj7</span><span class='chip off'>off book</span></li><li>bar 8.1: G7 &rarr; <span class=mark>Fmaj7</span><span class='chip off'>off book</span></li><li>bar 7.3: insert <span class=mark>C7</span><span class='chip rule'>dominant approach</span></li><li>bar 4.3: insert <span class=mark>A7</span><span class='chip off'>off book</span></li><li>bar 1.4: Db7 &rarr; <span class=mark>Gbdim7</span><span class='chip off'>off book</span></li></ol>
+</div><h2>Stella by Starlight</h2>
+<p class=why>The tune our listeners could not place — identified on 2 of 9 items. The agents edit it lightly and the reward model barely moves.</p>
+<div class=tabs role=tablist data-tabs><button class=tab role=tab data-card='t1a0' aria-selected='true'>Terse</button><button class=tab role=tab data-card='t1a1' aria-selected='false'>Tight</button><button class=tab role=tab data-card='t1a2' aria-selected='false'>Curious</button><button class=tab role=tab data-card='t1a3' aria-selected='false'>Long</button><button class=tab role=tab data-card='t1a4' aria-selected='false'>Unruled</button></div>
+<div class=card id='t1a0' >
+<p class=armline><b>Terse</b> &mdash; cap 4 edits, cannot delete.
+4 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t1_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t1a0.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 148.6, &quot;y&quot;: 498.6, &quot;w&quot;: 465.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 614.3, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 998.0, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1231.8, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1519.9, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1753.7, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2137.5, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2371.2, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2684, &quot;h&quot;: 703}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 491.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 640.9, &quot;y&quot;: 498.6, &quot;w&quot;: 429.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1070.1, &quot;y&quot;: 498.6, &quot;w&quot;: 321.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1391.2, &quot;y&quot;: 498.6, &quot;w&quot;: 321.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1712.4, &quot;y&quot;: 498.6, &quot;w&quot;: 259.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1971.7, &quot;y&quot;: 498.6, &quot;w&quot;: 429.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2401.0, &quot;y&quot;: 498.6, &quot;w&quot;: 259.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 25.6, &quot;y&quot;: 869.7, &quot;w&quot;: 466.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1063}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t1_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t1a0.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 8.1: Ab7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>minor for dominant</span><span class='chip rule'>modal interchange</span></li><li>bar 2.1: A7 &rarr; <span class=mark>Eb7</span><span class='chip rule'>tritone substitution</span></li><li>bar 3.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 4.1: F7 &rarr; <span class=mark>B7</span><span class='chip rule'>tritone substitution</span></li></ol>
+</div><div class=card id='t1a1' hidden>
+<p class=armline><b>Tight</b> &mdash; cap 6 edits, the tightest explorer.
+6 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t1_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t1a1.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 148.6, &quot;y&quot;: 498.6, &quot;w&quot;: 465.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 614.3, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 998.0, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1231.8, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1519.9, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1753.7, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2137.5, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2371.2, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2684, &quot;h&quot;: 703}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 563.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 712.9, &quot;y&quot;: 498.6, &quot;w&quot;: 426.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1139.9, &quot;y&quot;: 498.6, &quot;w&quot;: 258.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1397.9, &quot;y&quot;: 498.6, &quot;w&quot;: 319.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1717.3, &quot;y&quot;: 498.6, &quot;w&quot;: 258.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1975.4, &quot;y&quot;: 498.6, &quot;w&quot;: 426.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2402.3, &quot;y&quot;: 498.6, &quot;w&quot;: 258.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 25.6, &quot;y&quot;: 869.7, &quot;w&quot;: 466.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1063}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t1_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t1a1.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 2.1: A7 &rarr; <span class=mark>Eb7</span><span class='chip rule'>tritone substitution</span></li><li>bar 1.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 8.1: Ab7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>minor for dominant</span><span class='chip rule'>modal interchange</span></li><li>bar 6.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 6.3: Bb7 &rarr; <span class=mark>Db7</span><span class='chip rule'>backdoor dominant</span></li><li>bar 6.1: Bb7 &rarr; <span class=mark>Abm7</span><span class='chip rule'>ii-V related</span></li></ol>
+</div><div class=card id='t1a2' hidden>
+<p class=armline><b>Curious</b> &mdash; cap 8 edits, explores off the book most.
+5 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t1_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t1a2.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 148.6, &quot;y&quot;: 498.6, &quot;w&quot;: 465.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 614.3, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 998.0, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1231.8, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1519.9, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1753.7, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2137.5, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2371.2, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2684, &quot;h&quot;: 703}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 491.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 640.9, &quot;y&quot;: 498.6, &quot;w&quot;: 429.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1070.1, &quot;y&quot;: 498.6, &quot;w&quot;: 321.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1391.2, &quot;y&quot;: 498.6, &quot;w&quot;: 321.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1712.4, &quot;y&quot;: 498.6, &quot;w&quot;: 259.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1971.7, &quot;y&quot;: 498.6, &quot;w&quot;: 429.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2401.0, &quot;y&quot;: 498.6, &quot;w&quot;: 259.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 25.6, &quot;y&quot;: 865.7, &quot;w&quot;: 466.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1059}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t1_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t1a2.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 2.1: A7 &rarr; <span class=mark>Eb7</span><span class='chip rule'>tritone substitution</span></li><li>bar 5.4: insert <span class=mark>B7</span><span class='chip rule'>chromatic approach</span></li><li>bar 5.4: remove B7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 3.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 4.1: F7 &rarr; <span class=mark>B7</span><span class='chip rule'>tritone substitution</span></li></ol>
+</div><div class=card id='t1a3' hidden>
+<p class=armline><b>Long</b> &mdash; cap 10 edits, pays most per edit.
+5 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t1_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t1a3.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 148.6, &quot;y&quot;: 498.6, &quot;w&quot;: 465.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 614.3, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 998.0, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1231.8, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1519.9, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1753.7, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2137.5, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2371.2, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2684, &quot;h&quot;: 703}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 490.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 639.8, &quot;y&quot;: 498.6, &quot;w&quot;: 427.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1067.2, &quot;y&quot;: 498.6, &quot;w&quot;: 329.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1396.6, &quot;y&quot;: 498.6, &quot;w&quot;: 319.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1716.3, &quot;y&quot;: 498.6, &quot;w&quot;: 258.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1974.7, &quot;y&quot;: 498.6, &quot;w&quot;: 427.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2402.0, &quot;y&quot;: 498.6, &quot;w&quot;: 258.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 25.6, &quot;y&quot;: 865.7, &quot;w&quot;: 466.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1059}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t1_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t1a3.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 2.1: A7 &rarr; <span class=mark>Eb7</span><span class='chip rule'>tritone substitution</span></li><li>bar 4.1: F7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>modal interchange</span></li><li>bar 3.1: Cm7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>modal interchange</span></li><li>bar 4.1: remove Ebm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 3.3: insert <span class=mark>Ab7</span><span class='chip rule'>harmonic fill</span></li></ol>
+</div><div class=card id='t1a4' hidden>
+<p class=armline><b>Unruled</b> &mdash; cap 10 edits, trained without the rulebook.
+4 edits, 3 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t1_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t1a4.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 148.6, &quot;y&quot;: 498.6, &quot;w&quot;: 465.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 614.3, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 998.0, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1231.8, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1519.9, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1753.7, &quot;y&quot;: 498.6, &quot;w&quot;: 383.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2137.5, &quot;y&quot;: 498.6, &quot;w&quot;: 233.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2371.2, &quot;y&quot;: 498.6, &quot;w&quot;: 288.1, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2684, &quot;h&quot;: 703}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 490.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 639.8, &quot;y&quot;: 490.6, &quot;w&quot;: 427.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1067.2, &quot;y&quot;: 490.6, &quot;w&quot;: 258.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1325.5, &quot;y&quot;: 490.6, &quot;w&quot;: 319.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1645.2, &quot;y&quot;: 490.6, &quot;w&quot;: 258.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 1903.6, &quot;y&quot;: 490.6, &quot;w&quot;: 427.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 2330.9, &quot;y&quot;: 490.6, &quot;w&quot;: 329.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 25.6, &quot;y&quot;: 854.7, &quot;w&quot;: 466.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1048}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t1_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t1a4.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 2.1: A7 &rarr; <span class=mark>Bbmaj7</span><span class='chip off'>off book</span></li><li>bar 7.3: insert <span class=mark>Eb7</span><span class='chip off'>off book</span></li><li>bar 1.1: Em7b5 &rarr; <span class=mark>Edim7</span><span class='chip rule'>common tone diminished</span></li><li>bar 2.3: insert <span class=mark>Edim7</span><span class='chip off'>off book</span></li></ol>
+</div><h2>It Never Entered My Mind</h2>
+<p class=why>Rarely placed by our listeners — identified on 3 of 9 items — and a tune where even the shielded agents step outside the rulebook.</p>
+<div class=tabs role=tablist data-tabs><button class=tab role=tab data-card='t2a0' aria-selected='true'>Terse</button><button class=tab role=tab data-card='t2a1' aria-selected='false'>Tight</button><button class=tab role=tab data-card='t2a2' aria-selected='false'>Curious</button><button class=tab role=tab data-card='t2a3' aria-selected='false'>Long</button><button class=tab role=tab data-card='t2a4' aria-selected='false'>Unruled</button></div>
+<div class=card id='t2a0' >
+<p class=armline><b>Terse</b> &mdash; cap 4 edits, cannot delete.
+4 edits, 2 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t2_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t2a0.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 835.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 835.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1023}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 1012.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1038.0, &quot;y&quot;: 835.7, &quot;w&quot;: 1034.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2072.4, &quot;y&quot;: 835.7, &quot;w&quot;: 588.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1026}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t2_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t2a0.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 6.4: insert <span class=mark>Abdim7</span><span class='chip rule'>diminished passing</span></li><li>bar 5.1: Fmaj7 &rarr; <span class=mark>Gm7</span><span class='chip off'>off book</span></li><li>bar 3.1: Fmaj7 &rarr; <span class=mark>Gm7</span><span class='chip off'>off book</span></li><li>bar 2.1: Fmaj7 &rarr; <span class=mark>Dm7</span><span class='chip rule'>plagal cadence</span><span class='chip rule'>functional substitution</span></li></ol>
+</div><div class=card id='t2a1' hidden>
+<p class=armline><b>Tight</b> &mdash; cap 6 edits, the tightest explorer.
+5 edits, 1 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t2_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t2a1.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 835.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 835.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1023}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 838.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 838.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 838.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1026}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t2_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t2a1.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 8.1: Gm7 &rarr; <span class=mark>Gm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 6.3: Am7 &rarr; <span class=mark>Abmaj7</span><span class='chip rule'>modal interchange</span></li><li>bar 6.3: Abmaj7 &rarr; <span class=mark>Abdim7</span><span class='chip rule'>common tone diminished</span></li><li>bar 4.3: Am7 &rarr; <span class=mark>Bbmaj7</span><span class='chip rule'>plagal cadence</span></li><li>bar 2.1: Fmaj7 &rarr; <span class=mark>Gm7</span><span class='chip off'>off book</span></li></ol>
+</div><div class=card id='t2a2' hidden>
+<p class=armline><b>Curious</b> &mdash; cap 8 edits, explores off the book most.
+8 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t2_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t2a2.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 835.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 835.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1023}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 838.7, &quot;w&quot;: 911.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 937.1, &quot;y&quot;: 838.7, &quot;w&quot;: 1026.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1963.6, &quot;y&quot;: 838.7, &quot;w&quot;: 696.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1025}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t2_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t2a2.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 7.3: insert <span class=mark>D7</span><span class='chip rule'>dominant approach</span></li><li>bar 8.1: Gm7 &rarr; <span class=mark>Gm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 4.3: remove Am7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 8.3: insert <span class=mark>Db7</span><span class='chip rule'>chromatic approach</span></li><li>bar 5.3: remove Am7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 6.1: Fmaj7 &rarr; <span class=mark>Dm7</span><span class='chip rule'>plagal cadence</span><span class='chip rule'>functional substitution</span></li><li>bar 5.1: Fmaj7 &rarr; <span class=mark>Am7</span><span class='chip rule'>functional substitution</span></li><li>bar 4.3: insert <span class=mark>E7</span><span class='chip rule'>dominant approach</span></li></ol>
+</div><div class=card id='t2a3' hidden>
+<p class=armline><b>Long</b> &mdash; cap 10 edits, pays most per edit.
+10 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t2_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t2a3.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 835.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 835.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1023}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 619.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 768.7, &quot;y&quot;: 489.6, &quot;w&quot;: 491.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1260.0, &quot;y&quot;: 489.6, &quot;w&quot;: 498.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1758.4, &quot;y&quot;: 489.6, &quot;w&quot;: 396.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2155.2, &quot;y&quot;: 489.6, &quot;w&quot;: 505.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 837.7, &quot;w&quot;: 974.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1000.3, &quot;y&quot;: 837.7, &quot;w&quot;: 988.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1988.9, &quot;y&quot;: 837.7, &quot;w&quot;: 671.4, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1027}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t2_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t2a3.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 6.4: insert <span class=mark>Abm7</span><span class='chip rule'>chromatic approach</span></li><li>bar 6.4: Abm7 &rarr; <span class=mark>Abdim7</span><span class='chip rule'>diminished passing</span><span class='chip rule'>common tone diminished</span></li><li>bar 7.3: insert <span class=mark>D7</span><span class='chip rule'>dominant approach</span></li><li>bar 8.3: insert <span class=mark>Db7</span><span class='chip rule'>chromatic approach</span></li><li>bar 8.1: Gm7 &rarr; <span class=mark>Gm7b5</span><span class='chip rule'>modal interchange</span></li><li>bar 4.3: Am7 &rarr; <span class=mark>Bbm7</span><span class='chip rule'>modal interchange</span></li><li>bar 4.1: Fmaj7 &rarr; <span class=mark>Am7</span><span class='chip rule'>chromatic approach</span><span class='chip rule'>functional substitution</span></li><li>bar 3.1: Fmaj7 &rarr; <span class=mark>Dm7</span><span class='chip rule'>plagal cadence</span><span class='chip rule'>functional substitution</span></li><li>bar 3.3: remove Am7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 3.3: insert <span class=mark>E7</span><span class='chip rule'>dominant approach</span></li></ol>
+</div><div class=card id='t2a4' hidden>
+<p class=armline><b>Unruled</b> &mdash; cap 10 edits, trained without the rulebook.
+8 edits, 6 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t2_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t2a4.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 835.7, &quot;w&quot;: 947.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 973.3, &quot;y&quot;: 835.7, &quot;w&quot;: 1076.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2049.3, &quot;y&quot;: 835.7, &quot;w&quot;: 611.0, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1023}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 620.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 770.1, &quot;y&quot;: 489.6, &quot;w&quot;: 492.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1262.8, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1762.5, &quot;y&quot;: 489.6, &quot;w&quot;: 398.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2160.6, &quot;y&quot;: 489.6, &quot;w&quot;: 499.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 838.7, &quot;w&quot;: 883.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 909.4, &quot;y&quot;: 838.7, &quot;w&quot;: 988.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1898.1, &quot;y&quot;: 838.7, &quot;w&quot;: 762.3, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1025}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t2_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t2a4.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 6.3: Am7 &rarr; <span class=mark>Abdim7</span><span class='chip off'>off book</span></li><li>bar 2.3: Am7 &rarr; <span class=mark>Bdim7</span><span class='chip off'>off book</span></li><li>bar 4.3: Am7 &rarr; <span class=mark>Bb7</span><span class='chip off'>off book</span></li><li>bar 1.3: Am7 &rarr; <span class=mark>Bdim7</span><span class='chip off'>off book</span></li><li>bar 8.4: C7 &rarr; <span class=mark>Db7</span><span class='chip off'>off book</span></li><li>bar 8.3: insert <span class=mark>D7</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.3: Am7 &rarr; <span class=mark>Bdim7</span><span class='chip off'>off book</span></li><li>bar 8.2: insert <span class=mark>Eb7</span><span class='chip rule'>chromatic approach</span></li></ol>
+</div><h2>Come Sunday</h2>
+<p class=why>The sharpest contrast between shielded and unshielded: Terse gains in four edits what Unruled takes ten and nine off-book edits to beat.</p>
+<div class=tabs role=tablist data-tabs><button class=tab role=tab data-card='t3a0' aria-selected='true'>Terse</button><button class=tab role=tab data-card='t3a1' aria-selected='false'>Tight</button><button class=tab role=tab data-card='t3a2' aria-selected='false'>Curious</button><button class=tab role=tab data-card='t3a3' aria-selected='false'>Long</button><button class=tab role=tab data-card='t3a4' aria-selected='false'>Unruled</button></div>
+<div class=card id='t3a0' >
+<p class=armline><b>Terse</b> &mdash; cap 4 edits, cannot delete.
+4 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t3_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t3a0.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t3_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t3a0.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 1.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 6.1: F7 &rarr; <span class=mark>Cdim7</span><span class='chip rule'>diminished for dominant</span></li><li>bar 3.3: Gb7 &rarr; <span class=mark>Ab7</span><span class='chip rule'>modal interchange</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.1: F7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li></ol>
+</div><div class=card id='t3a1' hidden>
+<p class=armline><b>Tight</b> &mdash; cap 6 edits, the tightest explorer.
+6 edits, 1 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t3_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t3a1.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 490.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 490.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 490.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 490.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 490.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 490.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t3_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t3a1.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 1.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 3.3: remove Gb7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 4.1: remove G7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 3.1: remove F7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 1.1: F7 &rarr; <span class=mark>Adim7</span><span class='chip rule'>diminished for dominant</span></li><li>bar 8.1: Bbdim7 &rarr; <span class=mark>Ebmaj7</span><span class='chip off'>off book</span></li></ol>
+</div><div class=card id='t3a2' hidden>
+<p class=armline><b>Curious</b> &mdash; cap 8 edits, explores off the book most.
+8 edits, 1 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t3_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t3a2.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 493.6, &quot;w&quot;: 633.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 783.3, &quot;y&quot;: 493.6, &quot;w&quot;: 353.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1137.2, &quot;y&quot;: 493.6, &quot;w&quot;: 399.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1536.6, &quot;y&quot;: 493.6, &quot;w&quot;: 308.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1845.0, &quot;y&quot;: 493.6, &quot;w&quot;: 399.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2244.4, &quot;y&quot;: 493.6, &quot;w&quot;: 416.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 859.7, &quot;w&quot;: 484.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 510.4, &quot;y&quot;: 859.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1061}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t3_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t3a2.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 8.1: Bbdim7 &rarr; <span class=mark>Ebmaj7</span><span class='chip off'>off book</span></li><li>bar 7.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 4.3: insert <span class=mark>G7</span><span class='chip rule'>dominant approach</span></li><li>bar 5.1: Cm7 &rarr; <span class=mark>Cm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 3.3: Gb7 &rarr; <span class=mark>Ab7</span><span class='chip rule'>modal interchange</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.1: F7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 5.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 1.1: F7 &rarr; <span class=mark>Bbm7</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li></ol>
+</div><div class=card id='t3a3' hidden>
+<p class=armline><b>Long</b> &mdash; cap 10 edits, pays most per edit.
+9 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t3_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t3a3.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 633.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 783.3, &quot;y&quot;: 489.6, &quot;w&quot;: 353.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1137.2, &quot;y&quot;: 489.6, &quot;w&quot;: 399.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1536.6, &quot;y&quot;: 489.6, &quot;w&quot;: 308.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1845.0, &quot;y&quot;: 489.6, &quot;w&quot;: 399.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2244.4, &quot;y&quot;: 489.6, &quot;w&quot;: 416.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 484.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 510.4, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1057}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t3_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t3a3.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 4.3: insert <span class=mark>G7</span><span class='chip rule'>dominant approach</span></li><li>bar 5.4: insert <span class=mark>Gb7</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.3: Gb7 &rarr; <span class=mark>Ab7</span><span class='chip rule'>modal interchange</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.1: F7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 1.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 8.1: Bbdim7 &rarr; <span class=mark>Ebm7</span><span class='chip rule'>modal interchange</span></li><li>bar 7.3: insert <span class=mark>Bb7</span><span class='chip rule'>dominant approach</span></li><li>bar 5.1: Cm7 &rarr; <span class=mark>Cm7b5</span><span class='chip rule'>modal interchange</span></li><li>bar 5.4: Gb7 &rarr; <span class=mark>Edim7</span><span class='chip rule'>diminished for dominant</span></li></ol>
+</div><div class=card id='t3a4' hidden>
+<p class=armline><b>Unruled</b> &mdash; cap 10 edits, trained without the rulebook.
+10 edits, 9 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t3_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t3a4.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 646.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 795.8, &quot;y&quot;: 489.6, &quot;w&quot;: 364.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1160.7, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1572.6, &quot;y&quot;: 489.6, &quot;w&quot;: 249.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1822.2, &quot;y&quot;: 489.6, &quot;w&quot;: 411.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2234.1, &quot;y&quot;: 489.6, &quot;w&quot;: 426.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 855.7, &quot;w&quot;: 410.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 435.8, &quot;y&quot;: 855.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1060}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 630.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 779.6, &quot;y&quot;: 498.6, &quot;w&quot;: 350.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1130.2, &quot;y&quot;: 498.6, &quot;w&quot;: 395.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1525.9, &quot;y&quot;: 498.6, &quot;w&quot;: 325.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 1851.7, &quot;y&quot;: 498.6, &quot;w&quot;: 395.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 2247.4, &quot;y&quot;: 498.6, &quot;w&quot;: 413.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 25.6, &quot;y&quot;: 864.7, &quot;w&quot;: 484.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 510.4, &quot;y&quot;: 864.7, &quot;w&quot;: 233.2, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 1066}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t3_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t3a4.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 3.1: F7 &rarr; <span class=mark>Bbmaj7</span><span class='chip off'>off book</span></li><li>bar 8.1: Bbdim7 &rarr; <span class=mark>Bbmaj7</span><span class='chip off'>off book</span></li><li>bar 2.3: insert <span class=mark>Edim7</span><span class='chip off'>off book</span></li><li>bar 4.1: G7 &rarr; <span class=mark>Ebmaj7</span><span class='chip off'>off book</span></li><li>bar 4.1: Ebmaj7 &rarr; <span class=mark>Dm7</span><span class='chip off'>off book</span></li><li>bar 4.3: insert <span class=mark>Dbdim7</span><span class='chip off'>off book</span></li><li>bar 3.3: remove Gb7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 6.3: insert <span class=mark>Cdim7</span><span class='chip off'>off book</span></li><li>bar 1.1: F7 &rarr; <span class=mark>Bbmaj7</span><span class='chip off'>off book</span></li><li>bar 7.3: insert <span class=mark>Eb7</span><span class='chip off'>off book</span></li></ol>
+</div><h2>It&#x27;s Easy to Remember</h2>
+<p class=why>A ballad the five agents treat five different ways, over eleven rules.</p>
+<div class=tabs role=tablist data-tabs><button class=tab role=tab data-card='t4a0' aria-selected='true'>Terse</button><button class=tab role=tab data-card='t4a1' aria-selected='false'>Tight</button><button class=tab role=tab data-card='t4a2' aria-selected='false'>Curious</button><button class=tab role=tab data-card='t4a3' aria-selected='false'>Long</button><button class=tab role=tab data-card='t4a4' aria-selected='false'>Unruled</button></div>
+<div class=card id='t4a0' >
+<p class=armline><b>Terse</b> &mdash; cap 4 edits, cannot delete.
+4 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t4_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t4a0.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 742.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 891.7, &quot;y&quot;: 489.6, &quot;w&quot;: 480.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1371.9, &quot;y&quot;: 489.6, &quot;w&quot;: 378.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1750.2, &quot;y&quot;: 489.6, &quot;w&quot;: 312.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2062.5, &quot;y&quot;: 489.6, &quot;w&quot;: 597.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 821.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 821.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 987}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 755.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 905.2, &quot;y&quot;: 489.6, &quot;w&quot;: 493.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1398.9, &quot;y&quot;: 489.6, &quot;w&quot;: 386.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1785.7, &quot;y&quot;: 489.6, &quot;w&quot;: 322.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2107.9, &quot;y&quot;: 489.6, &quot;w&quot;: 552.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 823.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 823.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 823.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 989}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t4_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t4a0.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 7.2: Ebmaj7 &rarr; <span class=mark>F7</span><span class='chip rule'>dominant approach replace</span></li><li>bar 3.1: Fm7 &rarr; <span class=mark>Fm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 5.2: Abmaj7 &rarr; <span class=mark>Abm7</span><span class='chip rule'>modal interchange</span><span class='chip off' title='the chord already sounding here is the same, so the engraver writes nothing'>no change on the sheet</span></li><li>bar 5.4: insert <span class=mark>Edim7</span><span class='chip rule'>diminished passing</span></li></ol>
+</div><div class=card id='t4a1' hidden>
+<p class=armline><b>Tight</b> &mdash; cap 6 edits, the tightest explorer.
+6 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t4_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t4a1.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 742.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 891.7, &quot;y&quot;: 489.6, &quot;w&quot;: 480.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1371.9, &quot;y&quot;: 489.6, &quot;w&quot;: 378.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1750.2, &quot;y&quot;: 489.6, &quot;w&quot;: 312.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2062.5, &quot;y&quot;: 489.6, &quot;w&quot;: 597.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 821.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 821.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 987}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 771.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 921.0, &quot;y&quot;: 489.6, &quot;w&quot;: 509.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1430.6, &quot;y&quot;: 489.6, &quot;w&quot;: 430.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1860.9, &quot;y&quot;: 489.6, &quot;w&quot;: 333.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2194.8, &quot;y&quot;: 489.6, &quot;w&quot;: 465.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 820.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 820.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 820.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 986}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t4_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t4a1.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 2.3: C7 &rarr; <span class=mark>Edim7</span><span class='chip rule'>diminished passing</span><span class='chip rule'>diminished for dominant</span></li><li>bar 7.3: Bb7 &rarr; <span class=mark>Ddim7</span><span class='chip rule'>diminished for dominant</span></li><li>bar 5.2: remove Abmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 6.1: Fm7 &rarr; <span class=mark>Abmaj7</span><span class='chip rule'>functional substitution</span></li><li>bar 3.4: Bb7 &rarr; <span class=mark>Bdim7</span><span class='chip rule'>diminished for dominant</span></li><li>bar 7.2: remove Ebmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li></ol>
+</div><div class=card id='t4a2' hidden>
+<p class=armline><b>Curious</b> &mdash; cap 8 edits, explores off the book most.
+7 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t4_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t4a2.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 742.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 891.7, &quot;y&quot;: 489.6, &quot;w&quot;: 480.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1371.9, &quot;y&quot;: 489.6, &quot;w&quot;: 378.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1750.2, &quot;y&quot;: 489.6, &quot;w&quot;: 312.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2062.5, &quot;y&quot;: 489.6, &quot;w&quot;: 597.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 821.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 821.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 987}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 498.6, &quot;w&quot;: 755.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 905.2, &quot;y&quot;: 498.6, &quot;w&quot;: 493.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1398.9, &quot;y&quot;: 498.6, &quot;w&quot;: 386.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1785.7, &quot;y&quot;: 498.6, &quot;w&quot;: 322.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2107.9, &quot;y&quot;: 498.6, &quot;w&quot;: 552.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 832.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 832.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 832.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 998}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t4_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t4a2.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 5.2: remove Abmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 1.3: Bb7 &rarr; <span class=mark>E7</span><span class='chip rule'>tritone substitution</span></li><li>bar 3.1: Fm7 &rarr; <span class=mark>Fm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 7.2: Ebmaj7 &rarr; <span class=mark>B7</span><span class='chip rule'>chromatic approach</span></li><li>bar 1.1: Fm7 &rarr; <span class=mark>Abmaj7</span><span class='chip rule'>functional substitution</span></li><li>bar 4.4: remove Eb7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 5.4: insert <span class=mark>Edim7</span><span class='chip rule'>diminished passing</span></li></ol>
+</div><div class=card id='t4a3' hidden>
+<p class=armline><b>Long</b> &mdash; cap 10 edits, pays most per edit.
+8 edits, 0 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t4_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t4a3.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 742.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 891.7, &quot;y&quot;: 489.6, &quot;w&quot;: 480.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1371.9, &quot;y&quot;: 489.6, &quot;w&quot;: 378.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1750.2, &quot;y&quot;: 489.6, &quot;w&quot;: 312.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2062.5, &quot;y&quot;: 489.6, &quot;w&quot;: 597.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 821.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 821.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 987}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 862.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 1012.2, &quot;y&quot;: 489.6, &quot;w&quot;: 649.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1662.1, &quot;y&quot;: 489.6, &quot;w&quot;: 465.5, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 2127.6, &quot;y&quot;: 489.6, &quot;w&quot;: 532.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 886.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 911.9, &quot;y&quot;: 821.7, &quot;w&quot;: 526.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 1438.1, &quot;y&quot;: 821.7, &quot;w&quot;: 602.6, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 2040.7, &quot;y&quot;: 821.7, &quot;w&quot;: 619.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 989}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t4_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t4a3.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 5.4: insert <span class=mark>Edim7</span><span class='chip rule'>diminished passing</span></li><li>bar 5.2: remove Abmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 7.2: Ebmaj7 &rarr; <span class=mark>B7</span><span class='chip rule'>chromatic approach</span></li><li>bar 3.1: Fm7 &rarr; <span class=mark>Fm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 4.4: remove Eb7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 4.3: insert <span class=mark>Eb7</span><span class='chip rule'>dominant approach</span></li><li>bar 4.2: insert <span class=mark>E7</span><span class='chip rule'>chromatic approach</span></li><li>bar 2.2: insert <span class=mark>Db7</span><span class='chip rule'>chromatic approach</span></li></ol>
+</div><div class=card id='t4a4' hidden>
+<p class=armline><b>Unruled</b> &mdash; cap 10 edits, trained without the rulebook.
+8 edits, 2 of them off book.</p>
+<div class=sheets>
+  <div class=sheet data-role=before hidden><img loading=lazy src='assets/t4_chart.png'
+       alt='the published chart'><div class=ph></div></div>
+  <div class=sheet data-role=after><img loading=lazy src='assets/t4a4.png'
+       alt='the agent&#39;s reharmonization'><div class=ph></div></div>
+</div>
+<div class=ab data-geom='{&quot;before&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 742.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 891.7, &quot;y&quot;: 489.6, &quot;w&quot;: 480.2, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1371.9, &quot;y&quot;: 489.6, &quot;w&quot;: 378.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1750.2, &quot;y&quot;: 489.6, &quot;w&quot;: 312.3, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2062.5, &quot;y&quot;: 489.6, &quot;w&quot;: 597.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 821.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 821.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 821.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 987}, &quot;after&quot;: {&quot;bars&quot;: [{&quot;tick&quot;: 0, &quot;x&quot;: 149.6, &quot;y&quot;: 489.6, &quot;w&quot;: 766.7, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 2000, &quot;x&quot;: 916.3, &quot;y&quot;: 489.6, &quot;w&quot;: 504.8, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 4000, &quot;x&quot;: 1421.1, &quot;y&quot;: 489.6, &quot;w&quot;: 393.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 6000, &quot;x&quot;: 1815.0, &quot;y&quot;: 489.6, &quot;w&quot;: 330.4, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 8000, &quot;x&quot;: 2145.4, &quot;y&quot;: 489.6, &quot;w&quot;: 514.9, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 10000, &quot;x&quot;: 25.6, &quot;y&quot;: 823.7, &quot;w&quot;: 938.1, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 12000, &quot;x&quot;: 963.7, &quot;y&quot;: 823.7, &quot;w&quot;: 833.0, &quot;h&quot;: 99.2}, {&quot;tick&quot;: 14000, &quot;x&quot;: 1796.7, &quot;y&quot;: 823.7, &quot;w&quot;: 863.7, &quot;h&quot;: 99.2}], &quot;t0&quot;: 0, &quot;spt&quot;: 0.001, &quot;end&quot;: 16.0, &quot;w&quot;: 2685, &quot;h&quot;: 989}}'>
+  <button class=play>&#9654; Play</button>
+  <button class=sidebtn data-side=before>Chart</button>
+  <button class=sidebtn data-side=after aria-pressed=true>Agent</button>
+  <input type=range min=0 max=100 value=0 aria-label='seek'>
+  <audio data-role=before preload=none src='assets/t4_chart.mp3'></audio>
+  <audio data-role=after preload=none src='assets/t4a4.mp3'></audio>
+</div>
+<p class=armline style='margin:.7em 0 -.4em'>Its edits, in the order it played them:</p>
+<ol class=edits><li>bar 7.2: Ebmaj7 &rarr; <span class=mark>Fm7</span><span class='chip rule'>dominant approach replace minor</span></li><li>bar 3.1: Fm7 &rarr; <span class=mark>Fm7b5</span><span class='chip rule'>ii-V related</span><span class='chip rule'>modal interchange</span></li><li>bar 5.2: remove Abmaj7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 5.4: insert <span class=mark>C7</span><span class='chip off'>off book</span></li><li>bar 6.1: Fm7 &rarr; <span class=mark>Fm7b5</span><span class='chip rule'>modal interchange</span></li><li>bar 7.2: remove Fm7 (the previous chord sustains)<span class='chip rule'>remove chord</span></li><li>bar 7.3: Bb7 &rarr; <span class=mark>Adim7</span><span class='chip off'>off book</span></li><li>bar 1.3: Bb7 &rarr; <span class=mark>Abm7</span><span class='chip rule'>modal interchange</span></li></ol>
+</div>
+<p class=foot>Rollouts are greedy, as deployed &mdash; no search, no reward model
+consulted at play time. Bar positions come from MuseScore's own measure export, so
+the cursor follows the engraving rather than an assumed layout.</p>
+<p class=foot>Eight-bar excerpts, presented as research commentary alongside the
+analysis they illustrate. Audio is a synthesized rendering from chord symbols, not a
+recording. Non-commercial; no full scores are distributed. Lead-sheet sources: the
+JazzMus corpus (CC&nbsp;BY-NC&nbsp;4.0) and the Wikifonia archive. If you hold rights
+in any material here and would like it removed, contact
+<a href="mailto:alonyamin0@gmail.com">alonyamin0@gmail.com</a>.</p>
+<script>
+document.querySelectorAll('[data-tabs]').forEach(function (group) {
+  var tabs = group.querySelectorAll('.tab');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (o) {
+        o.setAttribute('aria-selected', String(o === t));
+        var c = document.getElementById(o.dataset.card);
+        if (c) { c.hidden = (o !== t); }
+      });
+    });
+  });
+});
+
+document.querySelectorAll('.ab').forEach(function (ab) {
+  var a = {before: ab.querySelector('[data-role=before]'),
+           after:  ab.querySelector('[data-role=after]')};
+  var cur = 'after', playBtn = ab.querySelector('.play'),
+      seek = ab.querySelector('input[type=range]'), card = ab.closest('.card');
+  var geom = null;
+  try { geom = ab.dataset.geom ? JSON.parse(ab.dataset.geom) : null; } catch (e) { geom = null; }
+  var sheets = {}, phs = {};
+  ['before', 'after'].forEach(function (k) {
+    sheets[k] = card ? card.querySelector('.sheet[data-role=' + k + ']') : null;
+    phs[k] = sheets[k] ? sheets[k].querySelector('.ph') : null;
+  });
+  function showSide() {
+    ['before', 'after'].forEach(function (k) {
+      if (sheets[k]) sheets[k].hidden = (k !== cur);
+      if (phs[k] && k !== cur) phs[k].classList.remove('on');
+    });
+    ab.querySelectorAll('.sidebtn').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.side === cur));
+    });
+  }
+  // Bar boxes come from MuseScore's own .mpos export, in the cropped image's pixel
+  // space, so they are rescaled by the image's displayed width. Layout is not
+  // uniform -- 6+2 bars per system happens -- which is why they are read, not computed.
+  function drawPh(t) {
+    if (!geom || !phs[cur] || !sheets[cur]) return;
+    var g = geom[cur], img = sheets[cur].querySelector('img'), ph = phs[cur];
+    if (!g || !img || !img.clientWidth) return;
+    var n = g.bars.length, barDur = g.end / n;
+    if (t < 0 || t >= g.end) { ph.classList.remove('on'); return; }
+    var i = Math.min(n - 1, Math.floor(t / barDur)), b = g.bars[i];
+    var f = (t - i * barDur) / barDur, s = img.clientWidth / g.w;
+    // The .mpos measure box already spans BOTH staves of these sheets (lead + piano),
+    // unlike the single-staff rule demo it was borrowed from. Reach a little above it
+    // for the chord symbols and stop at its bottom, or the cursor covers the title.
+    ph.style.left = ((b.x + f * b.w) * s) + 'px';
+    ph.style.top = Math.max(0, (b.y - 0.28 * b.h) * s) + 'px';
+    ph.style.height = (b.h * 1.32 * s) + 'px';
+    ph.classList.add('on');
+  }
+  playBtn.addEventListener('click', function () {
+    if (a[cur].paused) { a[cur].play(); playBtn.textContent = '\u23F8 Pause'; }
+    else { a[cur].pause(); playBtn.textContent = '\u25B6 Play'; }
+  });
+  ab.querySelectorAll('.sidebtn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var next = btn.dataset.side;
+      if (next === cur) return;
+      var t = a[cur].currentTime, playing = !a[cur].paused;
+      a[cur].pause();
+      cur = next;
+      a[cur].currentTime = Math.min(t, a[cur].duration || t);   // same bars, same tempo
+      showSide();
+      if (playing) { a[cur].play(); }
+      drawPh(a[cur].currentTime);
+    });
+  });
+  ['before', 'after'].forEach(function (k) {
+    a[k].addEventListener('timeupdate', function () {
+      if (k !== cur) return;
+      if (seek && a[k].duration) seek.value = String(100 * a[k].currentTime / a[k].duration);
+      drawPh(a[k].currentTime);
+    });
+    a[k].addEventListener('ended', function () {
+      if (k === cur) { playBtn.textContent = '\u25B6 Play'; drawPh(-1); }
+    });
+  });
+  if (seek) {
+    seek.addEventListener('input', function () {
+      if (!a[cur].duration) return;
+      a[cur].currentTime = a[cur].duration * (Number(seek.value) / 100);
+      drawPh(a[cur].currentTime);
+    });
+  }
+  showSide();
+});
+</script>
