@@ -55,7 +55,8 @@ img{width:100%;border:1px solid #ccc;background:#fff} audio{width:100%}
 &mdash; notation before and after, and the audio. <b>29 substitution rules</b> plus
 <b>2 structural moves</b> (delete and the ii&ndash;V split): 31 entries. These are what
 the agent is offered at every step, though a small share of its training exploration
-deliberately goes off the book.</p>
+deliberately goes off the book. Beats 1 and 3 are the strong beats; "weak beat" below
+always means beat 2 or 4.</p>
 <p class="prov">Drawn from the standard jazz-harmony literature and the reharmonization
 lessons on thejazzpianosite.com, with <b>Anton Petrov</b> and <b>Shai Cohen</b>.</p>
 <p class="prov"><b>See the agents at work:</b> <a href="agents.html">five agents on five
@@ -70,7 +71,7 @@ tunes</a>.</p>
 <h3>Chromatic approach <span class="badge">also replaces</span></h3>
 <div class="fam">tune: <b title="jazzmus_0048__Naima">Naima</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">A chord a half-step above or below the target, in the same quality family (planing). Rejected if both strong-beat and full-bar.</div>
+<div class="desc">A chord a half-step above or below the target, in the same quality family (major, minor, dominant, half-diminished or diminished — planing). As a replacement, rejected only if both on a strong beat and a full bar; as an insert, exactly one beat immediately before the target.</div>
 <div class="edit">Applied edit &mdash; bar 3, beat 1: replace A:maj7 with F#:maj7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -103,7 +104,7 @@ tunes</a>.</p>
 <h3>Diatonic approach <span class="badge">also replaces</span></h3>
 <div class="fam">tune: <b title="jazzmus_0063__Hallelujah,_I_love_her_so">Hallelujah, I love her so</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">A chord a whole step above or below the target, same family — stepwise bass motion. Metric gate: beat 3, half-bar span flush to the target.</div>
+<div class="desc">A chord a whole step above or below the target, same family (major, minor or dominant) — stepwise bass motion; the key is not consulted. Metric gate for insert and replace alike: beat 3, half-bar span flush to the target on the next downbeat.</div>
 <div class="edit">Applied edit &mdash; bar 5, beat 3: replace B:7 with D:min7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -136,7 +137,7 @@ tunes</a>.</p>
 <h3>Dominant approach (insert)</h3>
 <div class="fam">tune: <b title="jazzmus_0037__Central_Park_West">Central Park West</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Insert the V7 of the next chord: dominant quality a fifth above a stable target with cadential weight (primary V-I or secondary V/x onto a diatonic degree). Metric gate: onset on beat 3, spanning flush to the target downbeat; beat-4 quarter-note approaches are forbidden.</div>
+<div class="desc">Insert the V7 of the next chord: dominant quality a fifth above a stable target (major, minor or dominant; when the key is known, the tonic or a diatonic degree). Metric gate: onset on beat 3, spanning flush to the target on the next downbeat; beat-4 quarter-note approaches are forbidden.</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 3: insert Ab:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -202,7 +203,7 @@ tunes</a>.</p>
 <h3>Subdominant insert</h3>
 <div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">The subdominant (maj7 a fourth above) of the held chord is inserted into its span on a weak beat (Steedman's Rule 2: x -> x Sd_x).</div>
+<div class="desc">The subdominant (maj7 a fourth above) of the held chord is inserted into its span on a weak beat (2 or 4) next to the held chord's onset (Steedman's Rule 2: x -> x Sd_x).</div>
 <div class="edit">Applied edit &mdash; bar 1, beat 2: insert Ab:maj7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -271,7 +272,7 @@ tunes</a>.</p>
 <h3>Backdoor dominant</h3>
 <div class="fam">tune: <b title="jazzmus_0073__Ask_Me_Now">Ask Me Now</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Place a dominant a whole step below a major-family tonic target (bVII7 -> I; full form Fm7-Bb7-Cmaj7). Target must carry cadential weight; the major-target restriction is corpus-validated.</div>
+<div class="desc">Replace the chord before a major-family target with the dominant a whole step below it (bVII7 -> I; full form Fm7-Bb7-Cmaj7). The target must carry cadential weight (a downbeat or a full bar); the key is not consulted, so any maj7 a whole step up qualifies. Major-target restriction corpus-validated.</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 3: replace D:7 with B:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -304,7 +305,7 @@ tunes</a>.</p>
 <h3>Blues IV7 — quality swap</h3>
 <div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">An existing IV chord before a major/minor target takes dominant-7 quality (Fmaj7 -> F7 in C) — the literal blues IV. Weak beats only; never applied to a chord that is already dominant.</div>
+<div class="desc">An existing IV chord (a fourth above the NEXT chord, key-free) before a major/minor target takes dominant-7 quality (Fmaj7 -> F7 before Cmaj7) — the literal blues IV. Weak beats only (2 or 4); never applied to a chord that is already dominant.</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 2: replace F:maj7 with F:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -337,7 +338,7 @@ tunes</a>.</p>
 <h3>Blues IV7 — substitution</h3>
 <div class="fam">tune: <b title="jazzmus_0023__Easter_Parade">Easter Parade</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Any non-IV, non-dominant chord before a major/minor target is replaced by the target's IV7 (Dm7 -> F7 before Cmaj7). Weak beats only.</div>
+<div class="desc">Any non-IV, non-dominant chord before a major/minor target is replaced by the target's IV7 (Dm7 -> F7 before Cmaj7). Weak beats only (2 or 4).</div>
 <div class="edit">Applied edit &mdash; bar 4, beat 4: replace Db:dim7 with Eb:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -370,7 +371,7 @@ tunes</a>.</p>
 <h3>Deceptive cadence</h3>
 <div class="fam">tune: <b title="jazzmus_0064__No_Moe">No Moe</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Replace the expected resolution after a V: vi in major (V7 -> Am7 in C), bVI in minor (V7 -> Abmaj7 in C minor).</div>
+<div class="desc">The chord right after a dominant is replaced by the deceptive resolution: vi in major (G7 -> Am7 in C), bVI in minor (G7 -> Abmaj7 in C minor); with the key known, the dominant must be the primary V.</div>
 <div class="edit">Applied edit &mdash; bar 3, beat 1: replace Bb:maj7 with G:min7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -436,7 +437,7 @@ tunes</a>.</p>
 <h3>Related-ii backfill (replace)</h3>
 <div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Same trigger as the chaining rule, but places the minor seventh at that root instead of the dominant — the alternating ii/V colour of extended cycles (Am7-D7-Gm7-C7). The policy chooses between the two.</div>
+<div class="desc">Same trigger as the chaining rule (weak beat, next chord a dominant), but places the minor seventh at that root instead of the dominant — the alternating ii/V colour of extended cycles (Am7-D7-Gm7-C7). The policy chooses between the two.</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 4: replace F:maj7 with C:min7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -469,7 +470,7 @@ tunes</a>.</p>
 <h3>Secondary-dominant chaining (replace)</h3>
 <div class="fam">tune: <b title="jazzmus_0059__Hymn_To_Freedom">Hymn To Freedom</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Replace a non-dominant chord with the dominant a fifth above the following dominant. Weak beats only; never replaces an existing dominant. Successive applications unroll a full turnaround (E7-A7-D7-G7-C).</div>
+<div class="desc">Replace a non-dominant chord with the dominant a fifth above the following dominant. Weak beats only (2 or 4); never replaces an existing dominant; the key is not consulted. Successive applications unroll a full turnaround (E7-A7-D7-G7-C).</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 4: replace F:maj7 with C:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -535,7 +536,7 @@ tunes</a>.</p>
 <h3>ii-V preparation (replace)</h3>
 <div class="fam">tune: <b title="jazzmus_0019__Isfahan">Isfahan</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">The slot before a dominant receives its related ii (minor or half-diminished, a fourth below). The ii must span at least half a bar — shorter is passing, not preparatory.</div>
+<div class="desc">The chord before a dominant is replaced by its related ii (minor or half-diminished, a fourth below; any key). The replaced chord must span at least half a bar — shorter is passing, not preparatory. To put a ii before a bare mid-bar V, see the ii-V split.</div>
 <div class="edit">Applied edit &mdash; bar 2, beat 1: replace G:dim7 with G:min7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -602,7 +603,7 @@ tunes</a>.</p>
 <h3>Common-tone diminished <span class="badge">also inserts</span></h3>
 <div class="fam">tune: <b title="jazzmus_0044__Little_Willie_Leaps">Little Willie Leaps</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">A dim7 on the SAME root as the chord it embellishes (C6-Cdim-C6), replacing it or inserted after it under the beat-3 metric gate.</div>
+<div class="desc">A dim7 on the SAME root as the chord it embellishes (C6-Cdim-C6): as a replacement, any position; as an insert, beat 3 with a half-bar span flush to the next downbeat chord (which need not be the same chord).</div>
 <div class="edit">Applied edit &mdash; bar 1, beat 1: replace B:min7 with B:dim7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -668,7 +669,7 @@ tunes</a>.</p>
 <h3>Diminished passing chord <span class="badge">also inserts</span></h3>
 <div class="fam">tune: <b title="jazzmus_0037__Central_Park_West">Central Park West</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">A dim7 connects the surrounding chords by semitone root motion, ascending or descending; must be shorter than a full bar.</div>
+<div class="desc">A dim7 connects the surrounding chords by semitone root motion, ascending or descending. As a replacement the chord it replaces must be shorter than a full bar; as an insert it takes exactly one beat, immediately before the target (any beat).</div>
 <div class="edit">Applied edit &mdash; bar 7, beat 4: insert C:dim7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -999,7 +1000,7 @@ tunes</a>.</p>
 <h3>Plagal cadence</h3>
 <div class="fam">tune: <b title="jazzmus_0006__Aint_Misbehavin">Aint Misbehavin</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">The slot before a tonic-family target receives its IV, mode-matched (IV -> I major, iv -> i minor).</div>
+<div class="desc">The chord before a major or minor target is replaced by that target's IV, mode-matched (IV -> I major, iv -> i minor); the key is not consulted, so the target need not be the tonic.</div>
 <div class="edit">Applied edit &mdash; bar 2, beat 3: replace Bb:7 with Ab:maj7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -1033,7 +1034,7 @@ tunes</a>.</p>
 <h3>Delete (structural move)</h3>
 <div class="fam">tune: <b title="jazzmus_0002__Love_Walked_In">Love Walked In</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">Removes a chord onset so the previous chord sustains — the pruning move. The first and last occupied chords are protected (window cadence).</div>
+<div class="desc">Removes a chord onset so the previous chord sustains — the pruning move. The first and last occupied chords are protected (window cadence). Kept in the environment for older checkpoints, but switched OFF for training since 2026-09-10: it was the weakest move and the agent kept undoing its own deletions.</div>
 <div class="edit">Applied edit &mdash; bar 2, beat 4: delete Eb:7 (previous chord sustains)</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
@@ -1067,7 +1068,7 @@ tunes</a>.</p>
 <h3>ii-V split</h3>
 <div class="fam">tune: <b title="jazzmus_0001__Artillerie_Lourde">Artillerie Lourde</b>
   <a class="totop" href="#menu">&uarr; rules</a></div>
-<div class="desc">A dominant on a mid-bar half-bar span is subdivided: its related ii lands on beat 3 and the dominant is displaced to beat 4 — the quick quarter-note ii-V (C | G7 -> C | Dm7 G7).</div>
+<div class="desc">A dominant sitting on beat 3 with beat 4 free and a chord on the next downbeat is subdivided: its related ii (minor or half-diminished, a fourth below) lands on beat 3 and the dominant is displaced to beat 4 — the quick quarter-note ii-V (C | G7 -> C | Dm7 G7). Any key.</div>
 <div class="edit">Applied edit &mdash; bar 2, beat 3: split G:7 into D:min7 + G:7</div>
 <div class="row">
   <div class="side"><div class="lbl">BEFORE (published)</div>
